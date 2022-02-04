@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { authService, firebaseInstance } from "../fbase";
 import {
+  getAuth,
   createUserWithEmailAndPassword,
   GithubAuthProvider,
   GoogleAuthProvider,
@@ -27,15 +28,13 @@ const Auth = () => {
     event.preventDefault();
     try {
       let data;
+      const auth = getAuth();
       if (newAccount) {
         // create account
-        data = await authService.createUserWithEmailAndPassword(
-          email,
-          password
-        );
+        data = await createUserWithEmailAndPassword(auth, email, password);
       } else {
         // log in
-        data = await authService.signInWithEmailAndPassword(email, password);
+        data = await signInWithEmailAndPassword(auth, email, password);
       }
       console.log(data);
     } catch (error) {
