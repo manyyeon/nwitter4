@@ -42,7 +42,7 @@ const BigCalendar = () => {
     setModalOpen(false);
   };
 
-  const nextId = useRef(2);
+  const nextId = useRef(1);
   const onClick = () => {
     const { year, month, date } = modalDate;
     const event = {
