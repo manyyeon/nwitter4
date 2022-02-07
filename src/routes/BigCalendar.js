@@ -3,6 +3,10 @@ import { Calendar, momentLocalizer } from "react-big-calendar";
 import moment from "moment";
 import "react-big-calendar/lib/css/react-big-calendar.css";
 import Modal from "react-modal";
+import styles from "../styles/BigCalendar.module.scss";
+import classNames from "classnames/bind";
+
+const cx = classNames.bind(styles);
 
 const BigCalendar = () => {
   moment.locale("ko-KR");
@@ -53,7 +57,7 @@ const BigCalendar = () => {
 
   return (
     <div>
-      <div>Every Day</div>
+      <div className={cx("Title")}>Every Day</div>
       <Calendar
         localizer={localizer}
         events={events}
