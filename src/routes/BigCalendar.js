@@ -10,7 +10,17 @@ const BigCalendar = () => {
   const localizer = momentLocalizer(moment);
 
   const [modalOpen, setModalOpen] = useState(false);
-  const openModal = () => {
+  const [modalDate, setModalDate] = useState({
+    year: "",
+    month: "",
+    date: "",
+  });
+  const openModal = (e) => {
+    setModalDate({
+      year: e.start.getUTCFullYear(),
+      month: e.start.getMonth(),
+      date: e.start.getDate(),
+    });
     setModalOpen(true);
   };
   const closeModal = () => {
@@ -31,7 +41,9 @@ const BigCalendar = () => {
           backgroundColor: "white",
         }}
         components={{}}
-        onSelectSlot={openModal}
+        onSelectSlot={(e) => {
+          openModal(e);
+        }}
         selectable
       />
       <Modal
@@ -60,10 +72,11 @@ const BigCalendar = () => {
             borderRadius: "4px",
             outline: "none",
             padding: "20px",
+            fontSize: "80px",
           },
         }}
       >
-        Modal content
+        {modalDate.year}.{modalDate.month}.{modalDate.date}
       </Modal>
     </div>
   );
