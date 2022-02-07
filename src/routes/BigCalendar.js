@@ -1,8 +1,7 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import { Calendar, momentLocalizer } from "react-big-calendar";
 import moment from "moment";
 import "react-big-calendar/lib/css/react-big-calendar.css";
-import events from "./events";
 import Modal from "react-modal";
 
 const BigCalendar = () => {
@@ -15,6 +14,17 @@ const BigCalendar = () => {
     month: "",
     date: "",
   });
+
+  const [events, setEvents] = useState([
+    {
+      id: 0,
+      title: "All Day Event very long title",
+      allDay: true,
+      start: new Date(2022, 1, 0),
+      end: new Date(2022, 1, 3),
+    },
+  ]);
+
   const openModal = (e) => {
     setModalDate({
       year: e.start.getUTCFullYear(),
@@ -27,8 +37,23 @@ const BigCalendar = () => {
     setModalOpen(false);
   };
 
+  const nextId = useRef(2);
+  const onClick = () => {
+    const { year, month, date } = modalDate;
+    const event = {
+      id: nextId.current,
+      title: "New schedule",
+      allDay: true,
+      start: new Date(year, month, date),
+      end: new Date(year, month, date + 1),
+    };
+    setEvents([...events, event]);
+    nextId.current += 1;
+  };
+
   return (
     <div>
+      <div>Every Day</div>
       <Calendar
         localizer={localizer}
         events={events}
@@ -77,6 +102,9 @@ const BigCalendar = () => {
         }}
       >
         {modalDate.year}.{modalDate.month}.{modalDate.date}
+        <button onClick={onClick} style={{ fontSize: "50px" }}>
+          +
+        </button>
       </Modal>
     </div>
   );
