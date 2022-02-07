@@ -5,6 +5,7 @@ import "react-big-calendar/lib/css/react-big-calendar.css";
 import Modal from "react-modal";
 import styles from "../styles/BigCalendar.module.scss";
 import classNames from "classnames/bind";
+import { BsPlusCircle } from "react-icons/bs";
 
 const cx = classNames.bind(styles);
 
@@ -90,9 +91,9 @@ const BigCalendar = () => {
           },
           content: {
             position: "absolute",
-            top: "100px",
-            left: "100px",
-            right: "100px",
+            top: "250px",
+            left: "300px",
+            right: "300px",
             bottom: "100px",
             border: "10px solid #ccc",
             background: "#fff",
@@ -106,9 +107,9 @@ const BigCalendar = () => {
         }}
       >
         {modalDate.year}.{modalDate.month}.{modalDate.date}
-        <button onClick={onClick} style={{ fontSize: "50px" }}>
-          +
-        </button>
+        <div onClick={onClick}>
+          <BsPlusCircle />
+        </div>
       </Modal>
     </div>
   );
