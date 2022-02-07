@@ -1,4 +1,5 @@
 import React from "react";
+import BigCalendar from "../routes/BigCalendar";
 
-const Home = () => <span>Home</span>;
+const Home = () => <BigCalendar />;
 export default Home;

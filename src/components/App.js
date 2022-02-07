@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from "react";
 import AppRouter from "./Router";
 import { authService } from "../fbase";
-import BigCalendar from "../routes/BigCalendar";
+import Modal from "react-modal";
 
+Modal.setAppElement("#root");
 function App() {
   const [init, setInit] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -20,7 +21,6 @@ function App() {
     <>
       {init ? <AppRouter isLoggedIn={isLoggedIn} /> : "Initializing..."}
       <footer>&copy; Nwitter {new Date().getFullYear()}</footer>
-      <BigCalendar />
     </>
   );
 }

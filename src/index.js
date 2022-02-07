@@ -4,10 +4,10 @@ import App from "./components/App";
 import reportWebVitals from "./reportWebVitals";
 import firebase from "firebase/compat/app";
 
-console.log(firebase);
+const rootElement = document.getElementById("root");
 ReactDOM.render(
-  <React.StrictMode>
+  <>
     <App />
-  </React.StrictMode>,
-  document.getElementById("root")
+  </>,
+  rootElement
 );
