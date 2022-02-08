@@ -22,16 +22,6 @@ const BigCalendar = () => {
   const [inputDate, setInputDate] = useState({
     startDate: "",
     endDate: "",
-    start: {
-      year: 0,
-      month: 0,
-      day: 0,
-    },
-    end: {
-      year: 0,
-      month: 0,
-      day: 0,
-    },
   });
 
   const [events, setEvents] = useState([]);
@@ -47,28 +37,30 @@ const BigCalendar = () => {
   const closeModal = () => {
     setModalOpen(false);
   };
+  const [isClicked, setIsClicked] = useState(false);
+
+  const onClick = () => {
+    setIsClicked((prev) => !prev);
+  };
+
   const onChangeDate = (e) => {
     const { name, value } = e.target;
     setInputDate({
       ...inputDate,
       [name]: value,
     });
-    console.log([name].fullString);
-    console.log(new Date(name.fullString));
   };
-  const [isClicked, setIsClicked] = useState(false);
   const nextId = useRef(1);
-  const onClick = () => {
-    setIsClicked((prev) => !prev);
-    const { year, month, day } = modalDate;
+  const onSubmitSchedule = () => {
     const event = {
       id: nextId.current,
       title: "New schedule",
       allDay: true,
-      start: new Date(year, month, day),
-      end: new Date(year, month, day + 1),
+      start: new Date(inputDate.startDate),
+      end: new Date(inputDate.endDate),
     };
     setEvents([...events, event]);
+    console.log(events);
     nextId.current += 1;
   };
 
@@ -155,6 +147,7 @@ const BigCalendar = () => {
                 />
                 <input name="endTime" type="time" required />
               </div>
+              <button onClick={onSubmitSchedule}></button>
             </div>
           ) : (
             <BsPlusCircle className={cx("Button")} onClick={onClick} />
