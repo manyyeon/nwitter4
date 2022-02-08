@@ -14,7 +14,11 @@ const BigCalendar = () => {
   const localizer = momentLocalizer(moment);
 
   const [modalOpen, setModalOpen] = useState(false);
-  const [modalDate, setModalDate] = useState("");
+  const [clickedDate, setClickedDate] = useState({
+    year: 0,
+    month: 0,
+    date: 0,
+  });
   const [scheduleTitle, setScheduleTitle] = useState("");
   const [scheduleDate, setScheduleDate] = useState({
     startDate: "",
@@ -23,7 +27,7 @@ const BigCalendar = () => {
 
   const [events, setEvents] = useState([]);
 
-  const openModal = (e) => {
+  const openModal = () => {
     setModalOpen(true);
   };
   const closeModal = () => {
@@ -60,7 +64,6 @@ const BigCalendar = () => {
     setScheduleTitle("");
     nextId.current += 1;
   };
-
   return (
     <div>
       <div className={cx("Title")}>Every Day</div>
@@ -77,8 +80,12 @@ const BigCalendar = () => {
         }}
         components={{}}
         onSelectSlot={(e) => {
-          openModal(e);
-          setModalDate(new Date(e.start));
+          openModal();
+          setClickedDate({
+            year: e.start.getUTCFullYear(),
+            month: e.start.getMonth(),
+            date: e.start.getDate(),
+          });
         }}
         selectable
       />
@@ -112,9 +119,7 @@ const BigCalendar = () => {
           },
         }}
       >
-        {modalDate.getUTCFullYear()}.{modalDate.getMonth() + 1}.
-        {modalDate.getDate()}
-        {}
+        {clickedDate.year}.{clickedDate.month + 1}.{clickedDate.date}
         <div>
           {isClicked ? (
             <form>
