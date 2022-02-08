@@ -13,7 +13,7 @@ const BigCalendar = () => {
   moment.locale("ko-KR");
   const localizer = momentLocalizer(moment);
 
-  const [modalOpen, setModalOpen] = useState(false);
+  const [dateModalIsOpened, setDateModalIsOpened] = useState(false);
   const [clickedDate, setClickedDate] = useState({
     year: 0,
     month: 0,
@@ -27,12 +27,6 @@ const BigCalendar = () => {
 
   const [events, setEvents] = useState([]);
 
-  const openModal = () => {
-    setModalOpen(true);
-  };
-  const closeModal = () => {
-    setModalOpen(false);
-  };
   const [isClicked, setIsClicked] = useState(false);
 
   const onClick = () => {
@@ -80,7 +74,7 @@ const BigCalendar = () => {
         }}
         components={{}}
         onSelectSlot={(e) => {
-          openModal();
+          setDateModalIsOpened(true);
           setClickedDate({
             year: e.start.getUTCFullYear(),
             month: e.start.getMonth(),
@@ -90,8 +84,8 @@ const BigCalendar = () => {
         selectable
       />
       <Modal
-        isOpen={modalOpen}
-        onRequestClose={closeModal}
+        isOpen={dateModalIsOpened}
+        onRequestClose={() => setDateModalIsOpened(false)}
         style={{
           overlay: {
             position: "fixed",
