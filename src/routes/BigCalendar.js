@@ -27,14 +27,8 @@ const BigCalendar = () => {
     startDate: "",
     endDate: "",
   });
-
   const [events, setEvents] = useState([]);
-
   const [isClickedPlusButton, setIsClickedPlusButton] = useState(false);
-
-  const onClick = () => {
-    setIsClickedPlusButton((prev) => !prev);
-  };
 
   const onChangeTitle = (e) => {
     setScheduleTitle(e.target.value);
@@ -132,7 +126,10 @@ const BigCalendar = () => {
         <div>
           {isClickedPlusButton ? (
             <form>
-              <BsXCircle className={cx("Button")} onClick={onClick} />
+              <BsXCircle
+                className={cx("Button")}
+                onClick={() => setIsClickedPlusButton((prev) => !prev)}
+              />
               <input
                 name="scheduleTitle"
                 type="text"
@@ -166,7 +163,10 @@ const BigCalendar = () => {
               <input type="submit" value="저장" onClick={onSubmitSchedule} />
             </form>
           ) : (
-            <BsPlusCircle className={cx("Button")} onClick={onClick} />
+            <BsPlusCircle
+              className={cx("Button")}
+              onClick={() => setIsClickedPlusButton((prev) => !prev)}
+            />
           )}
         </div>
       </Modal>
