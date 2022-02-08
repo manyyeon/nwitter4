@@ -5,7 +5,7 @@ import "react-big-calendar/lib/css/react-big-calendar.css";
 import Modal from "react-modal";
 import styles from "../styles/BigCalendar.module.scss";
 import classNames from "classnames/bind";
-import { BsPlusCircle } from "react-icons/bs";
+import { BsPlusCircle, BsXCircle } from "react-icons/bs";
 
 const cx = classNames.bind(styles);
 
@@ -34,8 +34,10 @@ const BigCalendar = () => {
     setModalOpen(false);
   };
 
+  const [isClicked, setIsClicked] = useState(false);
   const nextId = useRef(1);
   const onClick = () => {
+    setIsClicked((prev) => !prev);
     const { year, month, date } = modalDate;
     const event = {
       id: nextId.current,
@@ -99,8 +101,28 @@ const BigCalendar = () => {
         }}
       >
         {modalDate.year}.{modalDate.month}.{modalDate.date}
-        <div onClick={onClick}>
-          <BsPlusCircle />
+        <div>
+          {isClicked ? (
+            <div>
+              <BsXCircle className={cx("Button")} onClick={onClick} />
+              <input
+                name="scheduleTitle"
+                type="text"
+                placeholder="Title"
+                required
+              />
+              <div>
+                <span>Start Date</span>
+                <input name="month" type="date" required />
+              </div>
+              <div>
+                <span>End Date</span>
+                <input name="month" type="date" required />
+              </div>
+            </div>
+          ) : (
+            <BsPlusCircle className={cx("Button")} onClick={onClick} />
+          )}
         </div>
       </Modal>
     </div>
