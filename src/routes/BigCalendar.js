@@ -20,15 +20,7 @@ const BigCalendar = () => {
     date: "",
   });
 
-  const [events, setEvents] = useState([
-    {
-      id: 0,
-      title: "All Day Event very long title",
-      allDay: true,
-      start: new Date(2022, 1, 0),
-      end: new Date(2022, 1, 3),
-    },
-  ]);
+  const [events, setEvents] = useState([]);
 
   const openModal = (e) => {
     setModalDate({

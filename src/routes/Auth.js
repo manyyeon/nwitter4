@@ -8,6 +8,11 @@ import {
   signInWithEmailAndPassword,
   signInWithPopup,
 } from "@firebase/auth";
+import styles from "../styles/Auth.module.scss";
+import classNames from "classnames/bind";
+import { BsGithub, BsGoogle } from "react-icons/bs";
+
+const cx = classNames.bind(styles);
 
 const Auth = () => {
   const [email, setEmail] = useState("");
@@ -56,9 +61,11 @@ const Auth = () => {
     console.log(data);
   };
   return (
-    <div>
+    <div className={cx("Auth")}>
+      <div className={cx("Title")}>Every Day</div>
       <form onSubmit={onSubmit}>
         <input
+          className={cx("Input")}
           name="email"
           type="email"
           placeholder="Email"
@@ -67,6 +74,7 @@ const Auth = () => {
           onChange={onChange}
         />
         <input
+          className={cx("Input")}
           name="password"
           type="password"
           placeholder="Password"
@@ -74,18 +82,33 @@ const Auth = () => {
           value={password}
           onChange={onChange}
         />
-        <input type="submit" value={newAccount ? "Create Account" : "Log In"} />
-        {error}
+        <input
+          className={cx("Submit")}
+          type="submit"
+          value={newAccount ? "Create Account" : "Log In"}
+        />
+        <div>{error}</div>
       </form>
-      <span onClick={toggleAccount}>
-        {newAccount ? "Sign in" : "Create Account"}
+      <span className={cx("Text")}>
+        {newAccount ? (
+          <>
+            <span>Already have an account?</span>
+            <span className={cx("Toggle")} onClick={toggleAccount}>
+              Sign in
+            </span>
+          </>
+        ) : (
+          <span className={cx("Toggle")} onClick={toggleAccount}>
+            Create Account
+          </span>
+        )}
       </span>
       <div>
-        <button onClick={onSocialClick} name="google">
-          Continue with Google
+        <button className={cx("Submit")} onClick={onSocialClick} name="google">
+          Continue with Google <BsGoogle />
         </button>
-        <button onClick={onSocialClick} name="github">
-          Continue with Github
+        <button className={cx("Submit")} onClick={onSocialClick} name="github">
+          Continue with Github <BsGithub />
         </button>
       </div>
     </div>
