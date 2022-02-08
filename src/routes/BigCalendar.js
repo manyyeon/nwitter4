@@ -5,7 +5,7 @@ import "react-big-calendar/lib/css/react-big-calendar.css";
 import Modal from "react-modal";
 import styles from "../styles/BigCalendar.module.scss";
 import classNames from "classnames/bind";
-import { BsPlusCircle, BsXCircle } from "react-icons/bs";
+import { BsInputCursor, BsPlusCircle, BsXCircle } from "react-icons/bs";
 
 const cx = classNames.bind(styles);
 
@@ -17,7 +17,21 @@ const BigCalendar = () => {
   const [modalDate, setModalDate] = useState({
     year: "",
     month: "",
-    date: "",
+    day: "",
+  });
+  const [inputDate, setInputDate] = useState({
+    startDate: "",
+    endDate: "",
+    start: {
+      year: 0,
+      month: 0,
+      day: 0,
+    },
+    end: {
+      year: 0,
+      month: 0,
+      day: 0,
+    },
   });
 
   const [events, setEvents] = useState([]);
@@ -26,25 +40,33 @@ const BigCalendar = () => {
     setModalDate({
       year: e.start.getUTCFullYear(),
       month: e.start.getMonth(),
-      date: e.start.getDate(),
+      day: e.start.getDate(),
     });
     setModalOpen(true);
   };
   const closeModal = () => {
     setModalOpen(false);
   };
-
+  const onChangeDate = (e) => {
+    const { name, value } = e.target;
+    setInputDate({
+      ...inputDate,
+      [name]: value,
+    });
+    console.log([name].fullString);
+    console.log(new Date(name.fullString));
+  };
   const [isClicked, setIsClicked] = useState(false);
   const nextId = useRef(1);
   const onClick = () => {
     setIsClicked((prev) => !prev);
-    const { year, month, date } = modalDate;
+    const { year, month, day } = modalDate;
     const event = {
       id: nextId.current,
       title: "New schedule",
       allDay: true,
-      start: new Date(year, month, date),
-      end: new Date(year, month, date + 1),
+      start: new Date(year, month, day),
+      end: new Date(year, month, day + 1),
     };
     setEvents([...events, event]);
     nextId.current += 1;
@@ -100,7 +122,7 @@ const BigCalendar = () => {
           },
         }}
       >
-        {modalDate.year}.{modalDate.month}.{modalDate.date}
+        {modalDate.year}.{modalDate.month + 1}.{modalDate.day}
         <div>
           {isClicked ? (
             <div>
@@ -112,12 +134,26 @@ const BigCalendar = () => {
                 required
               />
               <div>
-                <span>Start Date</span>
-                <input name="month" type="date" required />
+                <span>Start</span>
+                <input
+                  name="startDate"
+                  type="date"
+                  value={inputDate.startDate.fullString}
+                  required
+                  onChange={onChangeDate}
+                />
+                <input name="startTime" type="time" required />
               </div>
               <div>
-                <span>End Date</span>
-                <input name="month" type="date" required />
+                <span>End</span>
+                <input
+                  name="endDate"
+                  type="date"
+                  value={inputDate.endDate.fullString}
+                  required
+                  onChange={onChangeDate}
+                />
+                <input name="endTime" type="time" required />
               </div>
             </div>
           ) : (
