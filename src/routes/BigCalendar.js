@@ -5,7 +5,7 @@ import "react-big-calendar/lib/css/react-big-calendar.css";
 import Modal from "react-modal";
 import styles from "../styles/BigCalendar.module.scss";
 import classNames from "classnames/bind";
-import { BsInputCursor, BsPlusCircle, BsXCircle } from "react-icons/bs";
+import { BsPlusCircle, BsXCircle } from "react-icons/bs";
 
 const cx = classNames.bind(styles);
 
@@ -155,15 +155,7 @@ const BigCalendar = () => {
                 />
                 <input name="endTime" type="time" required />
               </div>
-              <input
-                type="submit"
-                onClick={onSubmitSchedule}
-                onKeyPress={(e) => {
-                  if (e.key === "Enter") {
-                    onSubmitSchedule();
-                  }
-                }}
-              />
+              <input type="submit" value="저장" onClick={onSubmitSchedule} />
             </form>
           ) : (
             <BsPlusCircle className={cx("Button")} onClick={onClick} />
