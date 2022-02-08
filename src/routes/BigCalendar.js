@@ -19,7 +19,8 @@ const BigCalendar = () => {
     month: "",
     day: "",
   });
-  const [inputDate, setInputDate] = useState({
+  const [scheduleTitle, setScheduleTitle] = useState("");
+  const [scheduleDate, setScheduleDate] = useState({
     startDate: "",
     endDate: "",
   });
@@ -43,10 +44,13 @@ const BigCalendar = () => {
     setIsClicked((prev) => !prev);
   };
 
+  const onChangeTitle = (e) => {
+    setScheduleTitle(e.target.value);
+  };
   const onChangeDate = (e) => {
     const { name, value } = e.target;
-    setInputDate({
-      ...inputDate,
+    setScheduleDate({
+      ...scheduleDate,
       [name]: value,
     });
   };
@@ -54,13 +58,15 @@ const BigCalendar = () => {
   const onSubmitSchedule = () => {
     const event = {
       id: nextId.current,
-      title: "New schedule",
+      title: scheduleTitle,
       allDay: true,
-      start: new Date(inputDate.startDate),
-      end: new Date(inputDate.endDate),
+      start: new Date(scheduleDate.startDate),
+      end: new Date(scheduleDate.endDate),
     };
     setEvents([...events, event]);
-    console.log(events);
+    // 초기화
+    setScheduleDate({ startDate: "", endDate: "" });
+    setScheduleTitle("");
     nextId.current += 1;
   };
 
@@ -117,12 +123,14 @@ const BigCalendar = () => {
         {modalDate.year}.{modalDate.month + 1}.{modalDate.day}
         <div>
           {isClicked ? (
-            <div>
+            <form>
               <BsXCircle className={cx("Button")} onClick={onClick} />
               <input
                 name="scheduleTitle"
                 type="text"
                 placeholder="Title"
+                value={scheduleTitle}
+                onChange={onChangeTitle}
                 required
               />
               <div>
@@ -130,7 +138,7 @@ const BigCalendar = () => {
                 <input
                   name="startDate"
                   type="date"
-                  value={inputDate.startDate.fullString}
+                  value={scheduleDate.startDate.fullString}
                   required
                   onChange={onChangeDate}
                 />
@@ -141,14 +149,22 @@ const BigCalendar = () => {
                 <input
                   name="endDate"
                   type="date"
-                  value={inputDate.endDate.fullString}
-                  required
+                  value={scheduleDate.endDate.fullString}
                   onChange={onChangeDate}
+                  required
                 />
                 <input name="endTime" type="time" required />
               </div>
-              <button onClick={onSubmitSchedule}></button>
-            </div>
+              <input
+                type="submit"
+                onClick={onSubmitSchedule}
+                onKeyPress={(e) => {
+                  if (e.key === "Enter") {
+                    onSubmitSchedule();
+                  }
+                }}
+              />
+            </form>
           ) : (
             <BsPlusCircle className={cx("Button")} onClick={onClick} />
           )}
