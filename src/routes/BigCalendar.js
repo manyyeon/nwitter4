@@ -21,7 +21,12 @@ const BigCalendar = () => {
     month: 0,
     date: 0,
   });
-  const [clickedScheduleId, setClickedScheduleId] = useState(0);
+  const [selectedSchedule, setSelectedSchedule] = useState({
+    id: 0,
+    title: "",
+    start: null,
+    end: null,
+  });
   const [scheduleTitle, setScheduleTitle] = useState("");
   const [scheduleDate, setScheduleDate] = useState({
     startDate: "",
@@ -58,7 +63,7 @@ const BigCalendar = () => {
     setDateModalIsOpened(false);
   };
   const onDeleteSchedule = () => {
-    setEvents(events.filter((event) => event.id != clickedScheduleId));
+    setEvents(events.filter((event) => event.id != selectedSchedule.id));
   };
   return (
     <div>
@@ -85,7 +90,8 @@ const BigCalendar = () => {
         }}
         onDoubleClickEvent={(e) => {
           setScheduleModalIsOpened(true);
-          setClickedScheduleId(e.id);
+          setSelectedSchedule(e);
+          console.log(e);
         }}
         selectable
       />
@@ -200,6 +206,39 @@ const BigCalendar = () => {
           },
         }}
       >
+        <div>
+          <div>{selectedSchedule.title}</div>
+        </div>
+        <form>
+          <input
+            name="selectedScheduleTitle"
+            type="text"
+            placeholder={selectedSchedule.title}
+            value={selectedSchedule.title}
+            onChange={(e) => {
+              setSelectedSchedule({
+                ...selectedSchedule,
+                title: e.target.value,
+              });
+            }}
+            required
+          />
+          <input
+            type="submit"
+            value="수정"
+            onClick={(e) => {
+              e.preventDefault();
+              setEvents(
+                events.map((event) =>
+                  event.id === selectedSchedule.id
+                    ? { ...event, title: selectedSchedule.title }
+                    : event
+                )
+              );
+              setScheduleModalIsOpened(false);
+            }}
+          />
+        </form>
         <FaTrashAlt className={cx("Button")} onClick={onDeleteSchedule} />
       </Modal>
     </div>
