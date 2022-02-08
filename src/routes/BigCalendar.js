@@ -14,11 +14,7 @@ const BigCalendar = () => {
   const localizer = momentLocalizer(moment);
 
   const [modalOpen, setModalOpen] = useState(false);
-  const [modalDate, setModalDate] = useState({
-    year: "",
-    month: "",
-    day: "",
-  });
+  const [modalDate, setModalDate] = useState("");
   const [scheduleTitle, setScheduleTitle] = useState("");
   const [scheduleDate, setScheduleDate] = useState({
     startDate: "",
@@ -28,11 +24,6 @@ const BigCalendar = () => {
   const [events, setEvents] = useState([]);
 
   const openModal = (e) => {
-    setModalDate({
-      year: e.start.getUTCFullYear(),
-      month: e.start.getMonth(),
-      day: e.start.getDate(),
-    });
     setModalOpen(true);
   };
   const closeModal = () => {
@@ -87,6 +78,7 @@ const BigCalendar = () => {
         components={{}}
         onSelectSlot={(e) => {
           openModal(e);
+          setModalDate(new Date(e.start));
         }}
         selectable
       />
@@ -120,7 +112,9 @@ const BigCalendar = () => {
           },
         }}
       >
-        {modalDate.year}.{modalDate.month + 1}.{modalDate.day}
+        {modalDate.getUTCFullYear()}.{modalDate.getMonth() + 1}.
+        {modalDate.getDate()}
+        {}
         <div>
           {isClicked ? (
             <form>
