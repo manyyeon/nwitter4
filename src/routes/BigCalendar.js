@@ -6,6 +6,7 @@ import Modal from "react-modal";
 import styles from "../styles/BigCalendar.module.scss";
 import classNames from "classnames/bind";
 import { BsPlusCircle, BsXCircle } from "react-icons/bs";
+import { FaTrashAlt } from "react-icons/fa";
 
 const cx = classNames.bind(styles);
 
@@ -14,11 +15,13 @@ const BigCalendar = () => {
   const localizer = momentLocalizer(moment);
 
   const [dateModalIsOpened, setDateModalIsOpened] = useState(false);
+  const [scheduleModalIsOpened, setScheduleModalIsOpened] = useState(false);
   const [clickedDate, setClickedDate] = useState({
     year: 0,
     month: 0,
     date: 0,
   });
+  const [clickedScheduleId, setClickedScheduleId] = useState(0);
   const [scheduleTitle, setScheduleTitle] = useState("");
   const [scheduleDate, setScheduleDate] = useState({
     startDate: "",
@@ -27,10 +30,10 @@ const BigCalendar = () => {
 
   const [events, setEvents] = useState([]);
 
-  const [isClicked, setIsClicked] = useState(false);
+  const [isClickedPlusButton, setIsClickedPlusButton] = useState(false);
 
   const onClick = () => {
-    setIsClicked((prev) => !prev);
+    setIsClickedPlusButton((prev) => !prev);
   };
 
   const onChangeTitle = (e) => {
@@ -57,6 +60,11 @@ const BigCalendar = () => {
     setScheduleDate({ startDate: "", endDate: "" });
     setScheduleTitle("");
     nextId.current += 1;
+    // modal 닫아주기
+    setDateModalIsOpened(false);
+  };
+  const onDeleteSchedule = () => {
+    setEvents(events.filter((event) => event.id != clickedScheduleId));
   };
   return (
     <div>
@@ -81,11 +89,18 @@ const BigCalendar = () => {
             date: e.start.getDate(),
           });
         }}
+        onDoubleClickEvent={(e) => {
+          setScheduleModalIsOpened(true);
+          setClickedScheduleId(e.id);
+        }}
         selectable
       />
       <Modal
         isOpen={dateModalIsOpened}
-        onRequestClose={() => setDateModalIsOpened(false)}
+        onRequestClose={() => {
+          setIsClickedPlusButton(false);
+          setDateModalIsOpened(false);
+        }}
         style={{
           overlay: {
             position: "fixed",
@@ -115,7 +130,7 @@ const BigCalendar = () => {
       >
         {clickedDate.year}.{clickedDate.month + 1}.{clickedDate.date}
         <div>
-          {isClicked ? (
+          {isClickedPlusButton ? (
             <form>
               <BsXCircle className={cx("Button")} onClick={onClick} />
               <input
@@ -154,6 +169,38 @@ const BigCalendar = () => {
             <BsPlusCircle className={cx("Button")} onClick={onClick} />
           )}
         </div>
+      </Modal>
+      <Modal
+        isOpen={scheduleModalIsOpened}
+        onRequestClose={() => setScheduleModalIsOpened(false)}
+        style={{
+          overlay: {
+            position: "fixed",
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            backgroundColor: "rgba(255, 255, 255, 0.75)",
+            zIndex: 1050,
+          },
+          content: {
+            position: "absolute",
+            top: "250px",
+            left: "500px",
+            right: "500px",
+            bottom: "100px",
+            border: "10px solid #ccc",
+            background: "#fff",
+            overflow: "auto",
+            WebkitOverflowScrolling: "touch",
+            borderRadius: "4px",
+            outline: "none",
+            padding: "20px",
+            fontSize: "80px",
+          },
+        }}
+      >
+        <FaTrashAlt className={cx("Button")} onClick={onDeleteSchedule} />
       </Modal>
     </div>
   );
