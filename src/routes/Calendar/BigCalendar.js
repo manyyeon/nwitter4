@@ -3,7 +3,7 @@ import { Calendar, momentLocalizer } from "react-big-calendar";
 import moment from "moment";
 import "react-big-calendar/lib/css/react-big-calendar.css";
 import Modal from "react-modal";
-import styles from "../styles/BigCalendar.module.scss";
+import styles from "../../styles/BigCalendar.module.scss";
 import classNames from "classnames/bind";
 import { BsPlusCircle, BsXCircle } from "react-icons/bs";
 import { FaTrashAlt } from "react-icons/fa";
@@ -145,6 +145,7 @@ const BigCalendar = () => {
           setModalIsOpened({ ...modalIsOpened, date: true });
           // 클릭한 날짜를 newSchedule의 default 값으로 설정
           setNewSchedule({
+            ...newSchedule,
             startDate: moment(e.start).format("YYYY-MM-DD"),
             endDate: moment(e.start).format("YYYY-MM-DD"),
             startTime: moment(e.start).format("HH:mm:SS"),
