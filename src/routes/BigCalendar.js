@@ -27,7 +27,7 @@ const BigCalendar = () => {
     endTime: "",
   });
   const [scheduleTitle, setScheduleTitle] = useState("");
-  const [scheduleDate, setScheduleDate] = useState({
+  const [newSchedule, setNewSchedule] = useState({
     startDate: "",
     endDate: "",
     startTime: "",
@@ -41,8 +41,8 @@ const BigCalendar = () => {
   };
   const onChangeDate = (e) => {
     const { name, value } = e.target;
-    setScheduleDate({
-      ...scheduleDate,
+    setNewSchedule({
+      ...newSchedule,
       [name]: value,
     });
   };
@@ -52,12 +52,12 @@ const BigCalendar = () => {
       id: nextId.current,
       title: scheduleTitle,
       allDay: false,
-      start: moment(scheduleDate.startDate.concat(" ", scheduleDate.startTime)),
-      end: moment(scheduleDate.endDate.concat(" ", scheduleDate.endTime)),
+      start: moment(newSchedule.startDate.concat(" ", newSchedule.startTime)),
+      end: moment(newSchedule.endDate.concat(" ", newSchedule.endTime)),
     };
     setEvents([...events, event]);
     // 초기화
-    setScheduleDate({ startDate: "", endDate: "", startTime: "", endTime: "" });
+    setNewSchedule({ startDate: "", endDate: "", startTime: "", endTime: "" });
     setScheduleTitle("");
     nextId.current += 1;
     // modal 닫아주기
@@ -122,7 +122,7 @@ const BigCalendar = () => {
         components={{}}
         onSelectSlot={(e) => {
           setModalIsOpened({ ...modalIsOpened, date: true });
-          setScheduleDate({
+          setNewSchedule({
             startDate: moment(e.start).format("YYYY-MM-DD"),
             endDate: moment(e.start).format("YYYY-MM-DD"),
             startTime: moment(e.start).format("HH:mm:SS"),
@@ -180,7 +180,7 @@ const BigCalendar = () => {
           },
         }}
       >
-        {moment(scheduleDate.startDate).format("YYYY.MM.DD")}
+        {moment(newSchedule.startDate).format("YYYY.MM.DD")}
         <div>
           {isClickedPlusButton ? (
             <form>
@@ -201,21 +201,21 @@ const BigCalendar = () => {
                 <input
                   name="startDate"
                   type="date"
-                  value={scheduleDate.startDate}
+                  value={newSchedule.startDate}
                   required
                   onChange={(e) => {
                     onChangeDate(e);
-                    console.log(scheduleDate);
+                    console.log(newSchedule);
                   }}
                 />
                 <input
                   name="startTime"
                   type="time"
-                  value={scheduleDate.startTime}
+                  value={newSchedule.startTime}
                   required
                   onChange={(e) => {
                     onChangeDate(e);
-                    console.log(scheduleDate);
+                    console.log(newSchedule);
                   }}
                 />
               </div>
@@ -224,21 +224,21 @@ const BigCalendar = () => {
                 <input
                   name="endDate"
                   type="date"
-                  value={scheduleDate.endDate}
+                  value={newSchedule.endDate}
                   onChange={(e) => {
                     onChangeDate(e);
-                    console.log(scheduleDate);
+                    console.log(newSchedule);
                   }}
                   required
                 />
                 <input
                   name="endTime"
                   type="time"
-                  value={scheduleDate.endTime}
+                  value={newSchedule.endTime}
                   required
                   onChange={(e) => {
                     onChangeDate(e);
-                    console.log(scheduleDate);
+                    console.log(newSchedule);
                   }}
                 />
               </div>
