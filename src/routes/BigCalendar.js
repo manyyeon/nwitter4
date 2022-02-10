@@ -14,10 +14,26 @@ const BigCalendar = () => {
   moment.locale("ko-KR");
   const localizer = momentLocalizer(moment);
 
+  ///////////////////////////////////////////////////////
+  // 변수들
+  // event 배열
+  const [events, setEvents] = useState([]);
+
+  // modal open 했는지 안했는지 판단
   const [modalIsOpened, setModalIsOpened] = useState({
     date: false,
     schedule: false,
   });
+
+  // 새로 등록하는 스케줄
+  const [newSchedule, setNewSchedule] = useState({
+    title: "",
+    startDate: "",
+    endDate: "",
+    startTime: "",
+    endTime: "",
+  });
+  // 등록되어 있는 스케줄 선택했을 때
   const [selectedSchedule, setSelectedSchedule] = useState({
     id: 0,
     title: "",
@@ -26,31 +42,28 @@ const BigCalendar = () => {
     startTime: "",
     endTime: "",
   });
-  const [scheduleTitle, setScheduleTitle] = useState("");
-  const [newSchedule, setNewSchedule] = useState({
-    startDate: "",
-    endDate: "",
-    startTime: "",
-    endTime: "",
-  });
-  const [events, setEvents] = useState([]);
+
+  // newSchedule 등록하는 modal 안에 있는 plus 버튼이 눌렸는지 안눌렸는지
   const [isClickedPlusButton, setIsClickedPlusButton] = useState(false);
 
-  const onChangeTitle = (e) => {
-    setScheduleTitle(e.target.value);
-  };
-  const onChangeDate = (e) => {
+  //////////////////////////////////////////////////////////////////////////////
+  // 콜백함수들
+
+  // newSchedule의 속성을 설정해줄 때
+  const onChangeNewSchedule = (e) => {
     const { name, value } = e.target;
     setNewSchedule({
       ...newSchedule,
       [name]: value,
     });
   };
+
+  // newSchedule을 등록할 때
   const nextId = useRef(1);
-  const onSubmitSchedule = () => {
+  const onSubmitNewSchedule = () => {
     const event = {
       id: nextId.current,
-      title: scheduleTitle,
+      title: newSchedule.title,
       allDay: false,
       start: moment(newSchedule.startDate.concat(" ", newSchedule.startTime)),
       end: moment(newSchedule.endDate.concat(" ", newSchedule.endTime)),
@@ -58,14 +71,17 @@ const BigCalendar = () => {
     setEvents([...events, event]);
     // 초기화
     setNewSchedule({ startDate: "", endDate: "", startTime: "", endTime: "" });
-    setScheduleTitle("");
     nextId.current += 1;
     // modal 닫아주기
     setModalIsOpened({ ...modalIsOpened, date: false });
   };
-  const onDeleteSchedule = () => {
+
+  // selectedSchedule을 삭제할 때
+  const onDeleteSelectedSchedule = () => {
     setEvents(events.filter((event) => event.id != selectedSchedule.id));
   };
+
+  // selectedSchedule의 속성을 설정해줄 때
   const onChangeSelectedSchedule = (e) => {
     const { name, value } = e.target;
     setSelectedSchedule({
@@ -73,8 +89,9 @@ const BigCalendar = () => {
       [name]: value,
     });
   };
+
+  // selectedSchedule을 수정한 것을 등록할 때
   const onModifySelectedSchedule = () => {
-    console.log(events);
     setEvents(
       events.map((event) =>
         event.id === selectedSchedule.id
@@ -94,7 +111,7 @@ const BigCalendar = () => {
           : event
       )
     );
-    // 초기화
+    // selectedSchedule 초기화
     setSelectedSchedule({
       id: 0,
       title: "",
@@ -103,8 +120,10 @@ const BigCalendar = () => {
       startTime: "",
       endTime: "",
     });
+    // modal 닫아주기
     setModalIsOpened({ ...modalIsOpened, schedule: false });
   };
+
   return (
     <div>
       <div className={cx("Title")}>Every Day</div>
@@ -120,8 +139,11 @@ const BigCalendar = () => {
           backgroundColor: "white",
         }}
         components={{}}
+        // 날짜 칸 클릭했을 때
         onSelectSlot={(e) => {
+          // date modal open하는 변수를 true로
           setModalIsOpened({ ...modalIsOpened, date: true });
+          // 클릭한 날짜를 newSchedule의 default 값으로 설정
           setNewSchedule({
             startDate: moment(e.start).format("YYYY-MM-DD"),
             endDate: moment(e.start).format("YYYY-MM-DD"),
@@ -129,8 +151,11 @@ const BigCalendar = () => {
             endTime: moment(e.start).format("HH:mm:SS"),
           });
         }}
+        // schedule을 더블클릭 했을 때
         onDoubleClickEvent={(e) => {
+          // schedule modal open하는 변수를 true로
           setModalIsOpened({ ...modalIsOpened, schedule: true });
+          // selectedSchedule의 정보 설정
           setSelectedSchedule({
             ...selectedSchedule,
             id: e.id,
@@ -140,10 +165,6 @@ const BigCalendar = () => {
             startTime: moment(e.start).format("HH:mm:SS"),
             endTime: moment(e.end).format("HH:mm:SS"),
           });
-          console.log("이벤트 객체 ");
-          console.log(e);
-          console.log("selectedSchedule 출력");
-          console.log(selectedSchedule);
         }}
         selectable
       />
@@ -189,11 +210,13 @@ const BigCalendar = () => {
                 onClick={() => setIsClickedPlusButton((prev) => !prev)}
               />
               <input
-                name="scheduleTitle"
+                name="title"
                 type="text"
                 placeholder="Title"
-                value={scheduleTitle}
-                onChange={onChangeTitle}
+                value={newSchedule.title}
+                onChange={(e) => {
+                  onChangeNewSchedule(e);
+                }}
                 required
               />
               <div>
@@ -204,7 +227,7 @@ const BigCalendar = () => {
                   value={newSchedule.startDate}
                   required
                   onChange={(e) => {
-                    onChangeDate(e);
+                    onChangeNewSchedule(e);
                     console.log(newSchedule);
                   }}
                 />
@@ -214,7 +237,7 @@ const BigCalendar = () => {
                   value={newSchedule.startTime}
                   required
                   onChange={(e) => {
-                    onChangeDate(e);
+                    onChangeNewSchedule(e);
                     console.log(newSchedule);
                   }}
                 />
@@ -226,7 +249,7 @@ const BigCalendar = () => {
                   type="date"
                   value={newSchedule.endDate}
                   onChange={(e) => {
-                    onChangeDate(e);
+                    onChangeNewSchedule(e);
                     console.log(newSchedule);
                   }}
                   required
@@ -237,12 +260,12 @@ const BigCalendar = () => {
                   value={newSchedule.endTime}
                   required
                   onChange={(e) => {
-                    onChangeDate(e);
+                    onChangeNewSchedule(e);
                     console.log(newSchedule);
                   }}
                 />
               </div>
-              <input type="submit" value="저장" onClick={onSubmitSchedule} />
+              <input type="submit" value="저장" onClick={onSubmitNewSchedule} />
             </form>
           ) : (
             <BsPlusCircle
@@ -350,7 +373,7 @@ const BigCalendar = () => {
         <FaTrashAlt
           className={cx("Button")}
           onClick={() => {
-            onDeleteSchedule();
+            onDeleteSelectedSchedule();
             setModalIsOpened({ ...modalIsOpened, schedule: false });
           }}
         />
