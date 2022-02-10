@@ -14,8 +14,10 @@ const BigCalendar = () => {
   moment.locale("ko-KR");
   const localizer = momentLocalizer(moment);
 
-  const [dateModalIsOpened, setDateModalIsOpened] = useState(false);
-  const [scheduleModalIsOpened, setScheduleModalIsOpened] = useState(false);
+  const [modalIsOpened, setModalIsOpened] = useState({
+    date: false,
+    schedule: false,
+  });
   const [selectedSchedule, setSelectedSchedule] = useState({
     id: 0,
     title: "",
@@ -59,7 +61,7 @@ const BigCalendar = () => {
     setScheduleTitle("");
     nextId.current += 1;
     // modal 닫아주기
-    setDateModalIsOpened(false);
+    setModalIsOpened({ ...modalIsOpened, date: false });
   };
   const onDeleteSchedule = () => {
     setEvents(events.filter((event) => event.id != selectedSchedule.id));
@@ -101,7 +103,7 @@ const BigCalendar = () => {
       startTime: "",
       endTime: "",
     });
-    setScheduleModalIsOpened(false);
+    setModalIsOpened({ ...modalIsOpened, schedule: false });
   };
   return (
     <div>
@@ -119,7 +121,7 @@ const BigCalendar = () => {
         }}
         components={{}}
         onSelectSlot={(e) => {
-          setDateModalIsOpened(true);
+          setModalIsOpened({ ...modalIsOpened, date: true });
           setScheduleDate({
             startDate: moment(e.start).format("YYYY-MM-DD"),
             endDate: moment(e.start).format("YYYY-MM-DD"),
@@ -128,7 +130,7 @@ const BigCalendar = () => {
           });
         }}
         onDoubleClickEvent={(e) => {
-          setScheduleModalIsOpened(true);
+          setModalIsOpened({ ...modalIsOpened, schedule: true });
           setSelectedSchedule({
             ...selectedSchedule,
             id: e.id,
@@ -146,10 +148,10 @@ const BigCalendar = () => {
         selectable
       />
       <Modal
-        isOpen={dateModalIsOpened}
+        isOpen={modalIsOpened.date}
         onRequestClose={() => {
           setIsClickedPlusButton(false);
-          setDateModalIsOpened(false);
+          setModalIsOpened({ ...modalIsOpened, date: false });
         }}
         style={{
           overlay: {
@@ -252,8 +254,10 @@ const BigCalendar = () => {
       </Modal>
       {/*schedule Modal */}
       <Modal
-        isOpen={scheduleModalIsOpened}
-        onRequestClose={() => setScheduleModalIsOpened(false)}
+        isOpen={modalIsOpened.schedule}
+        onRequestClose={() =>
+          setModalIsOpened({ ...modalIsOpened, schedule: false })
+        }
         style={{
           overlay: {
             position: "fixed",
@@ -347,7 +351,7 @@ const BigCalendar = () => {
           className={cx("Button")}
           onClick={() => {
             onDeleteSchedule();
-            setScheduleModalIsOpened(false);
+            setModalIsOpened({ ...modalIsOpened, schedule: false });
           }}
         />
       </Modal>
