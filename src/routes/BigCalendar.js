@@ -55,8 +55,8 @@ const BigCalendar = () => {
       id: nextId.current,
       title: scheduleTitle,
       allDay: false,
-      start: new Date(scheduleDate.startDate),
-      end: new Date(scheduleDate.endDate),
+      start: moment(scheduleDate.startDate.concat(" ", scheduleDate.startTime)),
+      end: moment(scheduleDate.endDate.concat(" ", scheduleDate.endTime)),
     };
     setEvents([...events, event]);
     // 초기화
@@ -75,6 +75,38 @@ const BigCalendar = () => {
       ...selectedSchedule,
       [name]: value,
     });
+  };
+  const onModifySelectedSchedule = () => {
+    console.log(events);
+    setEvents(
+      events.map((event) =>
+        event.id === selectedSchedule.id
+          ? {
+              ...event,
+              title: selectedSchedule.title,
+              start: moment(
+                selectedSchedule.startDate.concat(
+                  " ",
+                  selectedSchedule.startTime
+                )
+              ),
+              end: moment(
+                selectedSchedule.endDate.concat(" ", selectedSchedule.endTime)
+              ),
+            }
+          : event
+      )
+    );
+    // 초기화
+    setSelectedSchedule({
+      id: 0,
+      title: "",
+      startDate: "",
+      endDate: "",
+      startTime: "",
+      endTime: "",
+    });
+    setScheduleModalIsOpened(false);
   };
   return (
     <div>
@@ -101,8 +133,9 @@ const BigCalendar = () => {
           setScheduleDate({
             startDate: moment(e.start).format("YYYY-MM-DD"),
             endDate: moment(e.start).format("YYYY-MM-DD"),
+            startTime: moment(e.start).format("HH:mm:SS"),
+            endTime: moment(e.start).format("HH:mm:SS"),
           });
-          console.log(e);
         }}
         onDoubleClickEvent={(e) => {
           setScheduleModalIsOpened(true);
@@ -112,8 +145,8 @@ const BigCalendar = () => {
             title: e.title,
             startDate: moment(e.start).format("YYYY-MM-DD"),
             endDate: moment(e.end).format("YYYY-MM-DD"),
-            startTime: moment(e.start).format("HH:mm:ss"),
-            endTime: moment(e.end).format("HH:mm:ss"),
+            startTime: moment(e.start).format("HH:mm:SS"),
+            endTime: moment(e.end).format("HH:mm:SS"),
           });
           console.log("이벤트 객체 ");
           console.log(e);
@@ -178,14 +211,20 @@ const BigCalendar = () => {
                   type="date"
                   value={scheduleDate.startDate}
                   required
-                  onChange={onChangeDate}
+                  onChange={(e) => {
+                    onChangeDate(e);
+                    console.log(scheduleDate);
+                  }}
                 />
                 <input
                   name="startTime"
                   type="time"
                   value={scheduleDate.startTime}
                   required
-                  onChange={onChangeDate}
+                  onChange={(e) => {
+                    onChangeDate(e);
+                    console.log(scheduleDate);
+                  }}
                 />
               </div>
               <div>
@@ -194,7 +233,10 @@ const BigCalendar = () => {
                   name="endDate"
                   type="date"
                   value={scheduleDate.endDate}
-                  onChange={onChangeDate}
+                  onChange={(e) => {
+                    onChangeDate(e);
+                    console.log(scheduleDate);
+                  }}
                   required
                 />
                 <input
@@ -202,7 +244,10 @@ const BigCalendar = () => {
                   type="time"
                   value={scheduleDate.endTime}
                   required
-                  onChange={onChangeDate}
+                  onChange={(e) => {
+                    onChangeDate(e);
+                    console.log(scheduleDate);
+                  }}
                 />
               </div>
               <input type="submit" value="저장" onClick={onSubmitSchedule} />
@@ -305,23 +350,7 @@ const BigCalendar = () => {
           <input
             type="submit"
             value="수정"
-            onClick={(e) => {
-              e.preventDefault();
-              console.log(events);
-              setEvents(
-                events.map((event) =>
-                  event.id === selectedSchedule.id
-                    ? {
-                        ...event,
-                        title: selectedSchedule.title,
-                        start: new Date(selectedSchedule.startDate),
-                        end: new Date(selectedSchedule.endDate),
-                      }
-                    : event
-                )
-              );
-              setScheduleModalIsOpened(false);
-            }}
+            onClick={onModifySelectedSchedule}
           />
         </form>
         <FaTrashAlt
