@@ -70,7 +70,13 @@ const BigCalendar = () => {
     };
     setEvents([...events, event]);
     // 초기화
-    setNewSchedule({ startDate: "", endDate: "", startTime: "", endTime: "" });
+    setNewSchedule({
+      title: "",
+      startDate: "",
+      endDate: "",
+      startTime: "",
+      endTime: "",
+    });
     nextId.current += 1;
     // modal 닫아주기
     setModalIsOpened({ ...modalIsOpened, date: false });
@@ -229,7 +235,6 @@ const BigCalendar = () => {
                   required
                   onChange={(e) => {
                     onChangeNewSchedule(e);
-                    console.log(newSchedule);
                   }}
                 />
                 <input
@@ -239,7 +244,6 @@ const BigCalendar = () => {
                   required
                   onChange={(e) => {
                     onChangeNewSchedule(e);
-                    console.log(newSchedule);
                   }}
                 />
               </div>
@@ -251,7 +255,6 @@ const BigCalendar = () => {
                   value={newSchedule.endDate}
                   onChange={(e) => {
                     onChangeNewSchedule(e);
-                    console.log(newSchedule);
                   }}
                   required
                 />
@@ -262,7 +265,6 @@ const BigCalendar = () => {
                   required
                   onChange={(e) => {
                     onChangeNewSchedule(e);
-                    console.log(newSchedule);
                   }}
                 />
               </div>
