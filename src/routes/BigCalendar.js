@@ -16,11 +16,6 @@ const BigCalendar = () => {
 
   const [dateModalIsOpened, setDateModalIsOpened] = useState(false);
   const [scheduleModalIsOpened, setScheduleModalIsOpened] = useState(false);
-  const [clickedDate, setClickedDate] = useState({
-    year: 0,
-    month: 0,
-    date: 0,
-  });
   const [selectedSchedule, setSelectedSchedule] = useState({
     id: 0,
     title: "",
@@ -125,11 +120,6 @@ const BigCalendar = () => {
         components={{}}
         onSelectSlot={(e) => {
           setDateModalIsOpened(true);
-          setClickedDate({
-            year: e.start.getUTCFullYear(),
-            month: e.start.getMonth(),
-            date: e.start.getDate(),
-          });
           setScheduleDate({
             startDate: moment(e.start).format("YYYY-MM-DD"),
             endDate: moment(e.start).format("YYYY-MM-DD"),
@@ -188,7 +178,7 @@ const BigCalendar = () => {
           },
         }}
       >
-        {clickedDate.year}.{clickedDate.month + 1}.{clickedDate.date}
+        {moment(scheduleDate.startDate).format("YYYY.MM.DD")}
         <div>
           {isClickedPlusButton ? (
             <form>
