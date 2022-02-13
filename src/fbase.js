@@ -2,7 +2,7 @@ import firebase from "firebase/compat/app";
 import "firebase/compat/auth";
 import "firebase/compat/firestore";
 import "firebase/auth";
-import { initializeApp } from "firebase/app";
+
 import { getAuth } from "firebase/auth";
 
 const firebaseConfig = {
@@ -14,8 +14,9 @@ const firebaseConfig = {
   appId: process.env.REACT_APP_APP_ID,
 };
 
-const app = initializeApp(firebaseConfig);
+firebase.initializeApp(firebaseConfig);
 
 export const firebaseInstance = firebase;
 
 export const authService = getAuth();
+export const dbService = firebase.firestore();
