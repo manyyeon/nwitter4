@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { Calendar, momentLocalizer } from "react-big-calendar";
 import moment from "moment";
 import "react-big-calendar/lib/css/react-big-calendar.css";
@@ -7,6 +7,8 @@ import styles from "../../styles/BigCalendar.module.scss";
 import classNames from "classnames/bind";
 import { BsPlusCircle, BsXCircle } from "react-icons/bs";
 import { FaTrashAlt } from "react-icons/fa";
+import { dbService } from "../../fbase";
+import { addDoc, collection } from "firebase/firestore";
 
 const cx = classNames.bind(styles);
 
@@ -46,6 +48,29 @@ const BigCalendar = () => {
   // newSchedule 등록하는 modal 안에 있는 plus 버튼이 눌렸는지 안눌렸는지
   const [isClickedPlusButton, setIsClickedPlusButton] = useState(false);
 
+  useEffect(() => {
+    dbService.collection("schedule").onSnapshot((snapshot) => {
+      const events = snapshot.docs.map((doc) => ({
+        ...doc.data(),
+        id: doc.id,
+        allDay: false,
+        start: moment(doc.data().startDate.concat(" ", doc.data().startTime)),
+        end: moment(doc.data().endDate.concat(" ", doc.data().endTime)),
+      }));
+      console.log(events);
+      setEvents(events);
+      //setNweets(nweetArray);
+      // const event = {
+      //     id: nextId.current,
+      //     title: newSchedule.title,
+      //     allDay: false,
+      //     start: moment(newSchedule.startDate.concat(" ", newSchedule.startTime)),
+      //     end: moment(newSchedule.endDate.concat(" ", newSchedule.endTime)),
+      //   };
+      //   setEvents([...events, event]);
+    });
+  }, []);
+
   //////////////////////////////////////////////////////////////////////////////
   // 콜백함수들
 
@@ -60,15 +85,24 @@ const BigCalendar = () => {
 
   // newSchedule을 등록할 때
   const nextId = useRef(1);
-  const onSubmitNewSchedule = () => {
-    const event = {
-      id: nextId.current,
+  const onSubmitNewSchedule = async (e) => {
+    e.preventDefault();
+    // const event = {
+    //   id: nextId.current,
+    //   title: newSchedule.title,
+    //   allDay: false,
+    //   start: moment(newSchedule.startDate.concat(" ", newSchedule.startTime)),
+    //   end: moment(newSchedule.endDate.concat(" ", newSchedule.endTime)),
+    // };
+    // setEvents([...events, event]);
+    await addDoc(collection(dbService, "schedule"), {
       title: newSchedule.title,
-      allDay: false,
-      start: moment(newSchedule.startDate.concat(" ", newSchedule.startTime)),
-      end: moment(newSchedule.endDate.concat(" ", newSchedule.endTime)),
-    };
-    setEvents([...events, event]);
+      startDate: newSchedule.startDate,
+      endDate: newSchedule.endDate,
+      startTime: newSchedule.startTime,
+      endTime: newSchedule.endTime,
+    });
+
     // 초기화
     setNewSchedule({
       title: "",
@@ -211,7 +245,7 @@ const BigCalendar = () => {
         {moment(newSchedule.startDate).format("YYYY.MM.DD")}
         <div>
           {isClickedPlusButton ? (
-            <form>
+            <form onSubmit={(e) => onSubmitNewSchedule(e)}>
               <BsXCircle
                 className={cx("Button")}
                 onClick={() => setIsClickedPlusButton((prev) => !prev)}
@@ -268,7 +302,7 @@ const BigCalendar = () => {
                   }}
                 />
               </div>
-              <input type="submit" value="저장" onClick={onSubmitNewSchedule} />
+              <input type="submit" value="저장" />
             </form>
           ) : (
             <BsPlusCircle
