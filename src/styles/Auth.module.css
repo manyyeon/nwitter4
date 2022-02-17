@@ -1,0 +1,99 @@
+.Title {
+  font-size: 100px;
+  color: #1864ab;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  font-weight: bold;
+  margin-bottom: 20px;
+}
+
+.Button {
+  cursor: pointer;
+  color: #1864ab;
+}
+
+.Auth {
+  width: 100%;
+  height: 100vh;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+}
+
+.Auth form {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+}
+
+.Auth .Input {
+  font-size: 14px;
+  width: 250px;
+  height: 25px;
+  padding: 12px 20px;
+  border-radius: 100px;
+  margin: 8px 5px;
+  border: solid #1864ab;
+}
+
+.Auth .Input:focus {
+  outline: 4px solid #1b71c1;
+  border: solid white;
+}
+
+.Auth .Submit {
+  color: white;
+  font-size: 20px;
+  width: 290px;
+  height: 50px;
+  border-radius: 100px;
+  margin: 8px;
+  background-color: #1864ab;
+  border: none;
+  cursor: pointer;
+}
+
+.Auth .Submit:hover {
+  background: #4497e5;
+  border: none;
+  outline: none;
+}
+
+.Auth .Text {
+  color: #1864ab;
+  font-weight: 400;
+  font-size: 20px;
+  margin: 20px 15px;
+}
+
+.Auth .Text .Toggle {
+  font-weight: 550;
+  cursor: pointer;
+  margin: 15px;
+}
+
+.Auth .Text .Toggle:hover {
+  color: #4497e5;
+}
+/*# sourceMappingURL=Auth.module.css.map */

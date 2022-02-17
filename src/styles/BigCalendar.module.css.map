@@ -1,0 +1,9 @@
+{
+    "version": 3,
+    "mappings": "AAEA,AAAA,MAAM,CAAC;EACL,SAAS,EAAE,KAAK;EAChB,KAAK,EAJA,OAAO;EAKZ,OAAO,EAAE,IAAI;EACb,eAAe,EAAE,MAAM;EACvB,WAAW,EAAE,IAAI;EACjB,aAAa,EAAE,IAAI;CACpB;;AAED,AAAA,OAAO,CAAC;EACN,MAAM,EAAE,OAAO;EACf,KAAK,EAbA,OAAO;CAcb",
+    "sources": [
+        "BigCalendar.module.scss"
+    ],
+    "names": [],
+    "file": "BigCalendar.module.css"
+}

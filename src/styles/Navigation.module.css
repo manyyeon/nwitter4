@@ -1,0 +1,14 @@
+.icons {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: end;
+      -ms-flex-pack: end;
+          justify-content: end;
+}
+
+.icon {
+  margin-left: 6px;
+  margin-right: 6px;
+}
+/*# sourceMappingURL=Navigation.module.css.map */

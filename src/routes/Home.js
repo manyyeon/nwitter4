@@ -1,6 +1,6 @@
 import { dblClick } from "@testing-library/user-event/dist/click";
 import React, { useEffect, useState } from "react";
-import BigCalendar from "./Calendar/BigCalendar";
+
 import { dbService } from "../fbase";
 import { addDoc, collection } from "firebase/firestore";
 import Nweet from "../components/Nweet";
@@ -55,7 +55,6 @@ const Home = ({ userObj }) => {
           />
         ))}
       </div>
-      <BigCalendar />
     </div>
   );
 };

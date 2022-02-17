@@ -59,15 +59,6 @@ const BigCalendar = () => {
       }));
       console.log(events);
       setEvents(events);
-      //setNweets(nweetArray);
-      // const event = {
-      //     id: nextId.current,
-      //     title: newSchedule.title,
-      //     allDay: false,
-      //     start: moment(newSchedule.startDate.concat(" ", newSchedule.startTime)),
-      //     end: moment(newSchedule.endDate.concat(" ", newSchedule.endTime)),
-      //   };
-      //   setEvents([...events, event]);
     });
   }, []);
 
@@ -87,14 +78,6 @@ const BigCalendar = () => {
   const nextId = useRef(1);
   const onSubmitNewSchedule = async (e) => {
     e.preventDefault();
-    // const event = {
-    //   id: nextId.current,
-    //   title: newSchedule.title,
-    //   allDay: false,
-    //   start: moment(newSchedule.startDate.concat(" ", newSchedule.startTime)),
-    //   end: moment(newSchedule.endDate.concat(" ", newSchedule.endTime)),
-    // };
-    // setEvents([...events, event]);
     await addDoc(collection(dbService, "schedule"), {
       title: newSchedule.title,
       startDate: newSchedule.startDate,
@@ -119,6 +102,7 @@ const BigCalendar = () => {
   // selectedSchedule을 삭제할 때
   const onDeleteSelectedSchedule = () => {
     setEvents(events.filter((event) => event.id != selectedSchedule.id));
+    dbService.doc(`schedule/${selectedSchedule.id}`).delete();
   };
 
   // selectedSchedule의 속성을 설정해줄 때
