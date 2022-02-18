@@ -6,7 +6,6 @@ import { addDoc, collection } from "firebase/firestore";
 import Nweet from "../components/Nweet";
 
 const Home = ({ userObj }) => {
-  console.log(userObj);
   const [nweet, setNweet] = useState("");
   const [nweets, setNweets] = useState([]);
 

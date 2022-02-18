@@ -57,7 +57,6 @@ const BigCalendar = () => {
         start: moment(doc.data().startDate.concat(" ", doc.data().startTime)),
         end: moment(doc.data().endDate.concat(" ", doc.data().endTime)),
       }));
-      console.log(events);
       setEvents(events);
     });
   }, []);
