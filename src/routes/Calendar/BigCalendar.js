@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import { Calendar, momentLocalizer } from "react-big-calendar";
 import moment from "moment";
 import "react-big-calendar/lib/css/react-big-calendar.css";
-import Modal from "react-modal";
 import styles from "../../styles/BigCalendar.module.scss";
 import classNames from "classnames/bind";
 import { dbService } from "../../fbase";

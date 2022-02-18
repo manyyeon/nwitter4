@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import Modal from "react-modal";
-import moment from "moment";
 import { FaTrashAlt } from "react-icons/fa";
 import classNames from "classnames/bind";
 import styles from "../../styles/BigCalendar.module.scss";
