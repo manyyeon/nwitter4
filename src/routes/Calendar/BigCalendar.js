@@ -28,16 +28,7 @@ const BigCalendar = () => {
   });
 
   // 새로 등록하는 스케줄
-  const [newSchedule, setNewSchedule] = useState({
-    title: "",
-    startDate: "",
-    endDate: "",
-    startTime: "",
-    endTime: "",
-  });
-  // 등록되어 있는 스케줄 선택했을 때
-  const [selectedSchedule, setSelectedSchedule] = useState({
-    id: 0,
+  const [schedule, setSchedule] = useState({
     title: "",
     startDate: "",
     endDate: "",
@@ -65,65 +56,54 @@ const BigCalendar = () => {
   // 콜백함수들
 
   // newSchedule의 속성을 설정해줄 때
-  const onChangeNewSchedule = (e) => {
+  const onChangeSchedule = (e) => {
     const { name, value } = e.target;
-    setNewSchedule({
-      ...newSchedule,
+    setSchedule({
+      ...schedule,
       [name]: value,
     });
   };
 
   // newSchedule을 등록할 때
-  const nextId = useRef(1);
   const onSubmitNewSchedule = async (e) => {
     e.preventDefault();
     await addDoc(collection(dbService, "schedule"), {
-      title: newSchedule.title,
-      startDate: newSchedule.startDate,
-      endDate: newSchedule.endDate,
-      startTime: newSchedule.startTime,
-      endTime: newSchedule.endTime,
+      title: schedule.title,
+      startDate: schedule.startDate,
+      endDate: schedule.endDate,
+      startTime: schedule.startTime,
+      endTime: schedule.endTime,
     });
 
     // 초기화
-    setNewSchedule({
+    setSchedule({
       title: "",
       startDate: "",
       endDate: "",
       startTime: "",
       endTime: "",
     });
-    nextId.current += 1;
     // modal 닫아주기
     setModalIsOpened({ ...modalIsOpened, date: false });
   };
 
   // selectedSchedule을 삭제할 때
   const onDeleteSelectedSchedule = () => {
-    dbService.doc(`schedule/${selectedSchedule.id}`).delete();
-  };
-
-  // selectedSchedule의 속성을 설정해줄 때
-  const onChangeSelectedSchedule = (e) => {
-    const { name, value } = e.target;
-    setSelectedSchedule({
-      ...selectedSchedule,
-      [name]: value,
-    });
+    dbService.doc(`schedule/${schedule.id}`).delete();
   };
 
   // selectedSchedule을 수정한 것을 등록할 때
-  const onModifySelectedSchedule = () => {
-    dbService.doc(`schedule/${selectedSchedule.id}`).update({
-      title: selectedSchedule.title,
-      startDate: selectedSchedule.startDate,
-      endDate: selectedSchedule.endDate,
-      startTime: selectedSchedule.startTime,
-      endTime: selectedSchedule.endTime,
+  const onModifySelectedSchedule = (e) => {
+    e.preventDefault();
+    dbService.doc(`schedule/${schedule.id}`).update({
+      title: schedule.title,
+      startDate: schedule.startDate,
+      endDate: schedule.endDate,
+      startTime: schedule.startTime,
+      endTime: schedule.endTime,
     });
     // selectedSchedule 초기화
-    setSelectedSchedule({
-      id: 0,
+    setSchedule({
       title: "",
       startDate: "",
       endDate: "",
@@ -154,8 +134,9 @@ const BigCalendar = () => {
           // date modal open하는 변수를 true로
           setModalIsOpened({ ...modalIsOpened, date: true });
           // 클릭한 날짜를 newSchedule의 default 값으로 설정
-          setNewSchedule({
-            ...newSchedule,
+          setSchedule({
+            ...schedule,
+            title: "",
             startDate: moment(e.start).format("YYYY-MM-DD"),
             endDate: moment(e.start).format("YYYY-MM-DD"),
             startTime: moment(e.start).format("HH:mm:SS"),
@@ -167,8 +148,8 @@ const BigCalendar = () => {
           // schedule modal open하는 변수를 true로
           setModalIsOpened({ ...modalIsOpened, schedule: true });
           // selectedSchedule의 정보 설정
-          setSelectedSchedule({
-            ...selectedSchedule,
+          setSchedule({
+            ...schedule,
             id: e.id,
             title: e.title,
             startDate: moment(e.start).format("YYYY-MM-DD"),
@@ -212,7 +193,7 @@ const BigCalendar = () => {
           },
         }}
       >
-        {moment(newSchedule.startDate).format("YYYY.MM.DD")}
+        {moment(schedule.startDate).format("YYYY.MM.DD")}
         <div>
           {isClickedPlusButton ? (
             <form onSubmit={(e) => onSubmitNewSchedule(e)}>
@@ -224,10 +205,8 @@ const BigCalendar = () => {
                 name="title"
                 type="text"
                 placeholder="Title"
-                value={newSchedule.title}
-                onChange={(e) => {
-                  onChangeNewSchedule(e);
-                }}
+                value={schedule.title}
+                onChange={(e) => onChangeSchedule(e)}
                 required
               />
               <div>
@@ -235,20 +214,16 @@ const BigCalendar = () => {
                 <input
                   name="startDate"
                   type="date"
-                  value={newSchedule.startDate}
+                  value={schedule.startDate}
                   required
-                  onChange={(e) => {
-                    onChangeNewSchedule(e);
-                  }}
+                  onChange={(e) => onChangeSchedule(e)}
                 />
                 <input
                   name="startTime"
                   type="time"
-                  value={newSchedule.startTime}
+                  value={schedule.startTime}
                   required
-                  onChange={(e) => {
-                    onChangeNewSchedule(e);
-                  }}
+                  onChange={(e) => onChangeSchedule(e)}
                 />
               </div>
               <div>
@@ -256,20 +231,16 @@ const BigCalendar = () => {
                 <input
                   name="endDate"
                   type="date"
-                  value={newSchedule.endDate}
-                  onChange={(e) => {
-                    onChangeNewSchedule(e);
-                  }}
+                  value={schedule.endDate}
+                  onChange={(e) => onChangeSchedule(e)}
                   required
                 />
                 <input
                   name="endTime"
                   type="time"
-                  value={newSchedule.endTime}
+                  value={schedule.endTime}
                   required
-                  onChange={(e) => {
-                    onChangeNewSchedule(e);
-                  }}
+                  onChange={(e) => onChangeSchedule(e)}
                 />
               </div>
               <input type="submit" value="저장" />
@@ -316,17 +287,15 @@ const BigCalendar = () => {
         }}
       >
         <div>
-          <div>{selectedSchedule.title}</div>
+          <div>{schedule.title}</div>
         </div>
-        <form>
+        <form onSubmit={(e) => onModifySelectedSchedule(e)}>
           <input
             name="title"
             type="text"
-            placeholder={selectedSchedule.title}
-            value={selectedSchedule.title}
-            onChange={(e) => {
-              onChangeSelectedSchedule(e);
-            }}
+            placeholder={schedule.title}
+            value={schedule.title}
+            onChange={(e) => onChangeSchedule(e)}
             required
           />
           <div>
@@ -334,20 +303,16 @@ const BigCalendar = () => {
             <input
               name="startDate"
               type="date"
-              value={selectedSchedule.startDate}
+              value={schedule.startDate}
               required
-              onChange={(e) => {
-                onChangeSelectedSchedule(e);
-              }}
+              onChange={(e) => onChangeSchedule(e)}
             />
             <input
               name="startTime"
               type="time"
-              value={selectedSchedule.startTime}
+              value={schedule.startTime}
               required
-              onChange={(e) => {
-                onChangeSelectedSchedule(e);
-              }}
+              onChange={(e) => onChangeSchedule(e)}
             />
           </div>
           <div>
@@ -355,27 +320,19 @@ const BigCalendar = () => {
             <input
               name="endDate"
               type="date"
-              value={selectedSchedule.endDate}
-              onChange={(e) => {
-                onChangeSelectedSchedule(e);
-              }}
+              value={schedule.endDate}
+              onChange={(e) => onChangeSchedule(e)}
               required
             />
             <input
               name="endTime"
               type="time"
-              value={selectedSchedule.endTime}
+              value={schedule.endTime}
               required
-              onChange={(e) => {
-                onChangeSelectedSchedule(e);
-              }}
+              onChange={(e) => onChangeSchedule(e)}
             />
           </div>
-          <input
-            type="submit"
-            value="수정"
-            onClick={onModifySelectedSchedule}
-          />
+          <input type="submit" value="수정" />
         </form>
         <FaTrashAlt
           className={cx("Button")}
