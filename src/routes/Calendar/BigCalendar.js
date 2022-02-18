@@ -1,15 +1,14 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { Calendar, momentLocalizer } from "react-big-calendar";
 import moment from "moment";
 import "react-big-calendar/lib/css/react-big-calendar.css";
 import Modal from "react-modal";
 import styles from "../../styles/BigCalendar.module.scss";
 import classNames from "classnames/bind";
-import { BsPlusCircle, BsXCircle } from "react-icons/bs";
-import { FaTrashAlt } from "react-icons/fa";
 import { dbService } from "../../fbase";
 import { addDoc, collection } from "firebase/firestore";
 import NewSchedule from "./NewSchedule";
+import EditSchedule from "./EditSchedule";
 
 const cx = classNames.bind(styles);
 
@@ -17,8 +16,7 @@ const BigCalendar = () => {
   moment.locale("ko-KR");
   const localizer = momentLocalizer(moment);
 
-  ///////////////////////////////////////////////////////
-  // 변수들
+  // 변수들 //
   // event 배열
   const [events, setEvents] = useState([]);
 
@@ -28,7 +26,7 @@ const BigCalendar = () => {
     schedule: false,
   });
 
-  // 새로 등록하는 스케줄
+  // 스케줄
   const [schedule, setSchedule] = useState({
     title: "",
     startDate: "",
@@ -36,6 +34,16 @@ const BigCalendar = () => {
     startTime: "",
     endTime: "",
   });
+
+  const initializeSchedule = () => {
+    setSchedule({
+      title: "",
+      startDate: "",
+      endDate: "",
+      startTime: "",
+      endTime: "",
+    });
+  };
 
   useEffect(() => {
     dbService.collection("schedule").onSnapshot((snapshot) => {
@@ -50,10 +58,8 @@ const BigCalendar = () => {
     });
   }, []);
 
-  //////////////////////////////////////////////////////////////////////////////
-  // 콜백함수들
-
-  // newSchedule의 속성을 설정해줄 때
+  // 콜백함수들 //
+  // schedule의 속성을 설정해줄 때
   const onChangeSchedule = (e) => {
     const { name, value } = e.target;
     setSchedule({
@@ -74,13 +80,7 @@ const BigCalendar = () => {
     });
 
     // 초기화
-    setSchedule({
-      title: "",
-      startDate: "",
-      endDate: "",
-      startTime: "",
-      endTime: "",
-    });
+    initializeSchedule();
     // modal 닫아주기
     setModalIsOpened({ ...modalIsOpened, date: false });
   };
@@ -100,14 +100,8 @@ const BigCalendar = () => {
       startTime: schedule.startTime,
       endTime: schedule.endTime,
     });
-    // selectedSchedule 초기화
-    setSchedule({
-      title: "",
-      startDate: "",
-      endDate: "",
-      startTime: "",
-      endTime: "",
-    });
+    // 초기화
+    initializeSchedule();
     // modal 닫아주기
     setModalIsOpened({ ...modalIsOpened, schedule: false });
   };
@@ -165,95 +159,14 @@ const BigCalendar = () => {
         modalIsOpened={modalIsOpened}
         setModalIsOpened={setModalIsOpened}
       />
-      {/*schedule Modal */}
-      <Modal
-        isOpen={modalIsOpened.schedule}
-        onRequestClose={() =>
-          setModalIsOpened({ ...modalIsOpened, schedule: false })
-        }
-        style={{
-          overlay: {
-            position: "fixed",
-            top: 0,
-            left: 0,
-            right: 0,
-            bottom: 0,
-            backgroundColor: "rgba(255, 255, 255, 0.75)",
-            zIndex: 1050,
-          },
-          content: {
-            position: "absolute",
-            top: "250px",
-            left: "500px",
-            right: "500px",
-            bottom: "100px",
-            border: "10px solid #ccc",
-            background: "#fff",
-            overflow: "auto",
-            WebkitOverflowScrolling: "touch",
-            borderRadius: "4px",
-            outline: "none",
-            padding: "20px",
-            fontSize: "80px",
-          },
-        }}
-      >
-        <div>
-          <div>{schedule.title}</div>
-        </div>
-        <form onSubmit={(e) => onModifySchedule(e)}>
-          <input
-            name="title"
-            type="text"
-            placeholder={schedule.title}
-            value={schedule.title}
-            onChange={(e) => onChangeSchedule(e)}
-            required
-          />
-          <div>
-            <span>Start</span>
-            <input
-              name="startDate"
-              type="date"
-              value={schedule.startDate}
-              required
-              onChange={(e) => onChangeSchedule(e)}
-            />
-            <input
-              name="startTime"
-              type="time"
-              value={schedule.startTime}
-              required
-              onChange={(e) => onChangeSchedule(e)}
-            />
-          </div>
-          <div>
-            <span>End</span>
-            <input
-              name="endDate"
-              type="date"
-              value={schedule.endDate}
-              onChange={(e) => onChangeSchedule(e)}
-              required
-            />
-            <input
-              name="endTime"
-              type="time"
-              value={schedule.endTime}
-              required
-              onChange={(e) => onChangeSchedule(e)}
-            />
-          </div>
-          <input type="submit" value="수정" />
-        </form>
-        <FaTrashAlt
-          className={cx("Button")}
-          onClick={() => {
-            onDeleteSelectedSchedule();
-            setModalIsOpened({ ...modalIsOpened, schedule: false });
-          }}
-        />
-      </Modal>
+      <EditSchedule
+        schedule={schedule}
+        onChangeSchedule={onChangeSchedule}
+        onModifySchedule={onModifySchedule}
+        onDeleteSelectedSchedule={onDeleteSelectedSchedule}
+        modalIsOpened={modalIsOpened}
+        setModalIsOpened={setModalIsOpened}
+      />
     </div>
   );
 };
