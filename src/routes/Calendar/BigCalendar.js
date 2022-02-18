@@ -11,7 +11,7 @@ import EditSchedule from "./EditSchedule";
 
 const cx = classNames.bind(styles);
 
-const BigCalendar = () => {
+const BigCalendar = ({ userObj }) => {
   moment.locale("ko-KR");
   const localizer = momentLocalizer(moment);
 

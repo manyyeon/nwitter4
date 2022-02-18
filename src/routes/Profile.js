@@ -3,7 +3,7 @@ import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
 import { authService } from "../fbase";
 import BigCalendar from "./Calendar/BigCalendar";
 
-export default () => {
+const Profile = ({ userObj }) => {
   const history = useHistory();
   const onLogOutClick = () => {
     authService.signOut();
@@ -12,7 +12,9 @@ export default () => {
   return (
     <>
       <button onClick={onLogOutClick}>Log Out</button>
-      <BigCalendar />
+      <BigCalendar userObj={userObj} />
     </>
   );
 };
+
+export default Profile;
