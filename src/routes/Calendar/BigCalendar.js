@@ -101,7 +101,6 @@ const BigCalendar = () => {
 
   // selectedSchedule을 삭제할 때
   const onDeleteSelectedSchedule = () => {
-    setEvents(events.filter((event) => event.id != selectedSchedule.id));
     dbService.doc(`schedule/${selectedSchedule.id}`).delete();
   };
 
@@ -116,25 +115,13 @@ const BigCalendar = () => {
 
   // selectedSchedule을 수정한 것을 등록할 때
   const onModifySelectedSchedule = () => {
-    setEvents(
-      events.map((event) =>
-        event.id === selectedSchedule.id
-          ? {
-              ...event,
-              title: selectedSchedule.title,
-              start: moment(
-                selectedSchedule.startDate.concat(
-                  " ",
-                  selectedSchedule.startTime
-                )
-              ),
-              end: moment(
-                selectedSchedule.endDate.concat(" ", selectedSchedule.endTime)
-              ),
-            }
-          : event
-      )
-    );
+    dbService.doc(`schedule/${selectedSchedule.id}`).update({
+      title: selectedSchedule.title,
+      startDate: selectedSchedule.startDate,
+      endDate: selectedSchedule.endDate,
+      startTime: selectedSchedule.startTime,
+      endTime: selectedSchedule.endTime,
+    });
     // selectedSchedule 초기화
     setSelectedSchedule({
       id: 0,
