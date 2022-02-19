@@ -8,6 +8,7 @@ import { dbService } from "../../fbase";
 import { addDoc, collection } from "firebase/firestore";
 import NewSchedule from "./NewSchedule";
 import EditSchedule from "./EditSchedule";
+import { getAuth, onAuthStateChanged } from "firebase/auth";
 
 const cx = classNames.bind(styles);
 
