@@ -3,10 +3,16 @@ import Modal from "react-modal";
 import classNames from "classnames/bind";
 import styles from "../../styles/BigCalendar.module.scss";
 import { BsX } from "react-icons/bs";
+import FriendInformation from "./FriendInformation";
 
 const cx = classNames.bind(styles);
 
-const FriendsList = ({ modalIsOpened, setModalIsOpened, isFollowing }) => {
+const FriendsList = ({
+  modalIsOpened,
+  setModalIsOpened,
+  isFollowing,
+  followerList,
+}) => {
   return (
     <Modal
       isOpen={modalIsOpened}
@@ -38,12 +44,28 @@ const FriendsList = ({ modalIsOpened, setModalIsOpened, isFollowing }) => {
         },
       }}
     >
-      {isFollowing ? "팔로잉" : "팔로워"}
-      <BsX
-        onClick={() => {
-          setModalIsOpened(false);
-        }}
-      />
+      {isFollowing ? (
+        <>
+          <div>팔로잉</div>
+          <BsX
+            onClick={() => {
+              setModalIsOpened(false);
+            }}
+          />
+        </>
+      ) : (
+        <>
+          <div>팔로워</div>
+          <BsX
+            onClick={() => {
+              setModalIsOpened(false);
+            }}
+          />
+          {followerList.map((follower) => (
+            <FriendInformation key={follower.id} friendObj={follower} />
+          ))}
+        </>
+      )}
     </Modal>
   );
 };

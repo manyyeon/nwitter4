@@ -1,9 +1,30 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import FriendsList from "./FriendsList";
+import { dbService } from "../../fbase";
 
-const Friends = () => {
+const Friends = ({ userObj }) => {
+  // 변수들 //
   const [modalIsOpened, setModalIsOpened] = useState(false);
   const [isFollowing, setIsFollowing] = useState(false);
+  const [followerList, setFollowerList] = useState([]);
+  const [followingList, setFollowingList] = useState([]);
+
+  useEffect(() => {
+    dbService
+      .collection("users")
+      .doc(`${userObj.email}`)
+      .collection("follower")
+      .onSnapshot((snapshot) => {
+        const followerList = snapshot.docs.map((doc) => ({
+          ...doc.data(),
+          id: doc.id,
+          name: "",
+          email: doc.data().email,
+        }));
+        setFollowerList(followerList);
+      });
+  }, []);
+
   return (
     <>
       <button
@@ -26,6 +47,7 @@ const Friends = () => {
         modalIsOpened={modalIsOpened}
         setModalIsOpened={setModalIsOpened}
         isFollowing={isFollowing}
+        followerList={followerList}
       />
     </>
   );

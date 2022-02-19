@@ -13,7 +13,7 @@ const Profile = ({ userObj }) => {
 
   return (
     <>
-      <Friends />
+      <Friends userObj={userObj} />
       <button onClick={onLogOutClick}>Log Out</button>
       <BigCalendar userObj={userObj} />
     </>
