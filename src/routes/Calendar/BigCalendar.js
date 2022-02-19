@@ -112,6 +112,7 @@ const BigCalendar = ({ userObj }) => {
   return (
     <div>
       <div className={cx("Title")}>Every Day</div>
+      <div>user : {userObj.email}</div>
       <Calendar
         localizer={localizer}
         events={events}
