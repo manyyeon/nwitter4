@@ -12,6 +12,7 @@ const FriendsList = ({
   setModalIsOpened,
   isFollowing,
   followerList,
+  followingList,
 }) => {
   return (
     <Modal
@@ -29,10 +30,10 @@ const FriendsList = ({
         },
         content: {
           position: "absolute",
-          top: "250px",
-          left: "200px",
-          right: "200px",
-          bottom: "100px",
+          top: "150px",
+          left: "50px",
+          right: "50px",
+          bottom: "50px",
           border: "10px solid #ccc",
           background: "#fff",
           overflow: "auto",
@@ -52,6 +53,9 @@ const FriendsList = ({
               setModalIsOpened(false);
             }}
           />
+          {followingList.map((following) => (
+            <FriendInformation key={following.id} friendObj={following} />
+          ))}
         </>
       ) : (
         <>

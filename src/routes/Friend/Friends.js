@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import FriendsList from "./FriendsList";
 import { dbService } from "../../fbase";
+import { onSnapshot } from "firebase/firestore";
 
 const Friends = ({ userObj }) => {
   // 변수들 //
@@ -22,6 +23,19 @@ const Friends = ({ userObj }) => {
           email: doc.data().email,
         }));
         setFollowerList(followerList);
+      });
+    dbService
+      .collection("users")
+      .doc(`${userObj.email}`)
+      .collection("following")
+      .onSnapshot((snapshot) => {
+        const followingList = snapshot.docs.map((doc) => ({
+          ...doc.data(),
+          id: doc.id,
+          name: "",
+          email: doc.data().email,
+        }));
+        setFollowingList(followingList);
       });
   }, []);
 
@@ -48,6 +62,7 @@ const Friends = ({ userObj }) => {
         setModalIsOpened={setModalIsOpened}
         isFollowing={isFollowing}
         followerList={followerList}
+        followingList={followingList}
       />
     </>
   );
