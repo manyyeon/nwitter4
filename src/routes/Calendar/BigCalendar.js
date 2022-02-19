@@ -45,16 +45,20 @@ const BigCalendar = ({ userObj }) => {
   };
 
   useEffect(() => {
-    dbService.collection("schedule").onSnapshot((snapshot) => {
-      const events = snapshot.docs.map((doc) => ({
-        ...doc.data(),
-        id: doc.id,
-        allDay: false,
-        start: moment(doc.data().startDate.concat(" ", doc.data().startTime)),
-        end: moment(doc.data().endDate.concat(" ", doc.data().endTime)),
-      }));
-      setEvents(events);
-    });
+    dbService
+      .collection("users")
+      .doc(`${userObj.email}`)
+      .collection("schedules")
+      .onSnapshot((snapshot) => {
+        const events = snapshot.docs.map((doc) => ({
+          ...doc.data(),
+          id: doc.id,
+          allDay: false,
+          start: moment(doc.data().startDate.concat(" ", doc.data().startTime)),
+          end: moment(doc.data().endDate.concat(" ", doc.data().endTime)),
+        }));
+        setEvents(events);
+      });
   }, []);
 
   // 콜백함수들 //
@@ -70,7 +74,7 @@ const BigCalendar = ({ userObj }) => {
   // newSchedule을 등록할 때
   const onSubmitNewSchedule = async (e) => {
     e.preventDefault();
-    await addDoc(collection(dbService, "schedule"), {
+    await addDoc(collection(dbService, `users/${userObj.email}/schedules`), {
       title: schedule.title,
       startDate: schedule.startDate,
       endDate: schedule.endDate,
@@ -85,13 +89,13 @@ const BigCalendar = ({ userObj }) => {
 
   // selectedSchedule을 삭제할 때
   const onDeleteSelectedSchedule = () => {
-    dbService.doc(`schedule/${schedule.id}`).delete();
+    dbService.doc(`users/${userObj.email}/schedules/${schedule.id}`).delete();
   };
 
   // selectedSchedule을 수정한 것을 등록할 때
   const onModifySchedule = (e) => {
     e.preventDefault();
-    dbService.doc(`schedule/${schedule.id}`).update({
+    dbService.doc(`users/${userObj.email}/schedules/${schedule.id}`).update({
       title: schedule.title,
       startDate: schedule.startDate,
       endDate: schedule.endDate,

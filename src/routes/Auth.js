@@ -65,7 +65,7 @@ const Auth = () => {
       const token = credential.accessToken;
       // The signed-in user info.
       const user = result.user;
-      // ...
+      // user email 문서 만들기
       setDoc(doc(dbService, "users", `${user.email}`), {});
     });
   };
