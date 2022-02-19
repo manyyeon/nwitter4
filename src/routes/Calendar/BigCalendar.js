@@ -77,7 +77,6 @@ const BigCalendar = ({ userObj }) => {
       startTime: schedule.startTime,
       endTime: schedule.endTime,
     });
-
     // 초기화
     initializeSchedule();
     // modal 닫아주기

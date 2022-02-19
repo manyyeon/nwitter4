@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { authService, firebaseInstance } from "../fbase";
+import { authService, dbService, firebaseInstance } from "../fbase";
 import {
   getAuth,
   createUserWithEmailAndPassword,
@@ -11,6 +11,7 @@ import {
 import styles from "../styles/Auth.module.scss";
 import classNames from "classnames/bind";
 import { BsGithub, BsGoogle } from "react-icons/bs";
+import { doc, setDoc } from "firebase/firestore";
 
 const cx = classNames.bind(styles);
 
@@ -37,6 +38,7 @@ const Auth = () => {
       if (newAccount) {
         // create account
         data = await createUserWithEmailAndPassword(auth, email, password);
+        setDoc(doc(dbService, "users", `${email}`), {});
       } else {
         // log in
         data = await signInWithEmailAndPassword(auth, email, password);
@@ -56,7 +58,16 @@ const Auth = () => {
     } else if (name === "github") {
       provider = new GithubAuthProvider();
     }
-    const data = await signInWithPopup(authService, provider);
+
+    await signInWithPopup(authService, provider).then((result) => {
+      // This gives you a Google Access Token. You can use it to access the Google API.
+      const credential = GoogleAuthProvider.credentialFromResult(result);
+      const token = credential.accessToken;
+      // The signed-in user info.
+      const user = result.user;
+      // ...
+      setDoc(doc(dbService, "users", `${user.email}`), {});
+    });
   };
   return (
     <div className={cx("Auth")}>
