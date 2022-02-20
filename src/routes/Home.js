@@ -9,6 +9,7 @@ import BigCalendar from "./Calendar/BigCalendar";
 const Home = ({ userObj }) => {
   const [following, setFollowing] = useState("");
   const [followingList, setFollowingList] = useState([]);
+  const [userList, setUserList] = useState([]);
 
   useEffect(() => {
     dbService
@@ -24,6 +25,15 @@ const Home = ({ userObj }) => {
         }));
         setFollowingList(followingList);
       });
+
+    dbService.collection("users").onSnapshot((snapshot) => {
+      const userList = snapshot.docs.map((doc) => ({
+        ...doc.data(),
+        email: doc.id,
+      }));
+      setUserList(userList);
+    });
+    console.log(userList);
   }, []);
 
   return (

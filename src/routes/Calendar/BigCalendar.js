@@ -46,6 +46,7 @@ const BigCalendar = ({ userObj }) => {
   };
 
   useEffect(() => {
+    console.log(userObj);
     dbService
       .collection("users")
       .doc(`${userObj.email}`)
@@ -60,7 +61,7 @@ const BigCalendar = ({ userObj }) => {
         }));
         setEvents(events);
       });
-  }, []);
+  }, [userObj]);
 
   // 콜백함수들 //
   // schedule의 속성을 설정해줄 때
