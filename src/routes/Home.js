@@ -10,6 +10,7 @@ const Home = ({ userObj }) => {
   const [following, setFollowing] = useState("");
   const [followingList, setFollowingList] = useState([]);
   const [userList, setUserList] = useState([]);
+  const [followingBtnList, setFollowingBtnList] = useState([]);
 
   useEffect(() => {
     dbService
@@ -24,6 +25,18 @@ const Home = ({ userObj }) => {
           email: doc.data().email,
         }));
         setFollowingList(followingList);
+        const followingBtnList = snapshot.docs.map((doc) => (
+          <button
+            id={doc.data().email}
+            key={doc.id}
+            onClick={(e) => {
+              console.log(e.target.id);
+            }}
+          >
+            사람
+          </button>
+        ));
+        setFollowingBtnList(followingBtnList);
       });
 
     dbService.collection("users").onSnapshot((snapshot) => {
@@ -38,6 +51,7 @@ const Home = ({ userObj }) => {
 
   return (
     <>
+      {followingBtnList}
       <form
         onSubmit={async (e) => {
           e.preventDefault();
@@ -62,8 +76,8 @@ const Home = ({ userObj }) => {
         <input type="submit" value="팔로잉하기" />
       </form>
 
-      {followingList.map((following) => (
-        <BigCalendar key={following.id} userObj={following} />
+      {followingList.map((followingObj) => (
+        <BigCalendar key={followingObj.id} userObj={followingObj} />
       ))}
     </>
   );
