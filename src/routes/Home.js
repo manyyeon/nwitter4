@@ -7,6 +7,7 @@ import { MdPersonSearch } from "react-icons/md";
 import BigCalendar from "./Calendar/BigCalendar";
 
 const Home = ({ userObj }) => {
+  const [following, setFollowing] = useState("");
   const [followingList, setFollowingList] = useState([]);
 
   useEffect(() => {
@@ -27,9 +28,28 @@ const Home = ({ userObj }) => {
 
   return (
     <>
-      <form>
+      <form
+        onSubmit={async (e) => {
+          e.preventDefault();
+          await addDoc(
+            collection(dbService, `users/${userObj.email}/following`),
+            {
+              name: "",
+              email: following,
+            }
+          );
+          setFollowing("");
+        }}
+      >
         <MdPersonSearch />
-        <input type="text" placeholder="친구 검색" />
+        <input
+          type="email"
+          placeholder="친구 검색"
+          value={following}
+          required
+          onChange={(e) => setFollowing(e.target.value)}
+        />
+        <input type="submit" value="팔로잉하기" />
       </form>
 
       {followingList.map((following) => (

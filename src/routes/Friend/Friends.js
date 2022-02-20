@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import FriendsList from "./FriendsList";
 import { dbService } from "../../fbase";
 import { onSnapshot } from "firebase/firestore";
+import { BsPersonCircle } from "react-icons/bs";
 
 const Friends = ({ userObj }) => {
   // 변수들 //
@@ -41,6 +42,8 @@ const Friends = ({ userObj }) => {
 
   return (
     <>
+      <BsPersonCircle />
+      <div></div>
       <button
         onClick={() => {
           setModalIsOpened(true);
