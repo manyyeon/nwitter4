@@ -1,4 +1,4 @@
-import { dblClick } from "@testing-library/user-event/dist/click";
+import { click, dblClick } from "@testing-library/user-event/dist/click";
 import React, { useEffect, useState } from "react";
 
 import { dbService } from "../fbase";
@@ -7,10 +7,15 @@ import { MdPersonSearch } from "react-icons/md";
 import BigCalendar from "./Calendar/BigCalendar";
 
 const Home = ({ userObj }) => {
-  const [following, setFollowing] = useState("");
+  const [followingEmail, setFollowingEmail] = useState("");
   const [followingList, setFollowingList] = useState([]);
   const [userList, setUserList] = useState([]);
   const [followingBtnList, setFollowingBtnList] = useState([]);
+  const [clickedPerson, setClickedPerson] = useState({
+    id: "",
+    name: "",
+    email: "",
+  });
 
   useEffect(() => {
     dbService
@@ -25,18 +30,27 @@ const Home = ({ userObj }) => {
           email: doc.data().email,
         }));
         setFollowingList(followingList);
-        const followingBtnList = snapshot.docs.map((doc) => (
-          <button
-            id={doc.data().email}
-            key={doc.id}
-            onClick={(e) => {
-              console.log(e.target.id);
-            }}
-          >
-            사람
-          </button>
-        ));
-        setFollowingBtnList(followingBtnList);
+        if (followingList.length !== 0) {
+          setClickedPerson({
+            ...clickedPerson,
+            email: followingList[0].email,
+          });
+          const followingBtnList = snapshot.docs.map((doc) => (
+            <button
+              id={doc.data().email}
+              key={doc.id}
+              onClick={(e) => {
+                setClickedPerson({
+                  ...clickedPerson,
+                  email: e.target.id,
+                });
+              }}
+            >
+              사람
+            </button>
+          ));
+          setFollowingBtnList(followingBtnList);
+        }
       });
 
     dbService.collection("users").onSnapshot((snapshot) => {
@@ -46,39 +60,50 @@ const Home = ({ userObj }) => {
       }));
       setUserList(userList);
     });
-    console.log(userList);
   }, []);
 
   return (
     <>
+      <div>{clickedPerson.email}</div>
       {followingBtnList}
       <form
         onSubmit={async (e) => {
           e.preventDefault();
-          await addDoc(
-            collection(dbService, `users/${userObj.email}/following`),
-            {
-              name: "",
-              email: following,
+          let isExistUser = false;
+          for (let i = 0; i < userList.length; i++) {
+            if (userList[i].email === followingEmail) {
+              isExistUser = true;
+              await addDoc(
+                collection(dbService, `users/${userObj.email}/following`),
+                {
+                  name: "",
+                  email: followingEmail,
+                }
+              );
+              break;
             }
-          );
-          setFollowing("");
+          }
+          if (isExistUser === false) {
+            alert("그런 사람 없음");
+          }
+          setFollowingEmail("");
         }}
       >
         <MdPersonSearch />
         <input
           type="email"
           placeholder="친구 검색"
-          value={following}
+          value={followingEmail}
           required
-          onChange={(e) => setFollowing(e.target.value)}
+          onChange={(e) => setFollowingEmail(e.target.value)}
         />
         <input type="submit" value="팔로잉하기" />
       </form>
-
-      {followingList.map((followingObj) => (
-        <BigCalendar key={followingObj.id} userObj={followingObj} />
-      ))}
+      {followingBtnList.length !== 0 ? (
+        <BigCalendar key={clickedPerson.email} userObj={clickedPerson} />
+      ) : (
+        "팔로잉할 사람을 추가해보세요"
+      )}
     </>
   );
 };
