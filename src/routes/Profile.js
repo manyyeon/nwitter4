@@ -1,12 +1,14 @@
 import React, { useEffect } from "react";
+import { MdSettingsInputAntenna } from "react-icons/md";
 import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
 import { authService, dbService } from "../fbase";
 import BigCalendar from "./Calendar/BigCalendar";
 import Friends from "./Friend/Friends";
 
-const Profile = ({ userObj }) => {
+const Profile = ({ userObj, setInit }) => {
   const history = useHistory();
   const onLogOutClick = () => {
+    setInit(false);
     authService.signOut();
     history.push("/");
   };

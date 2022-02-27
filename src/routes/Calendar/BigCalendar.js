@@ -46,7 +46,6 @@ const BigCalendar = ({ userObj }) => {
   };
 
   useEffect(() => {
-    console.log(userObj);
     dbService
       .collection("users")
       .doc(`${userObj.email}`)
