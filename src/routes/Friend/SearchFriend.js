@@ -13,6 +13,8 @@ const SearchFriend = ({
   userList,
   modalIsOpened,
   setModalIsOpened,
+  followingList,
+  setFollowingList,
 }) => {
   const [searchFollowingList, setSearchFollowingList] = useState([]);
   const [followingEmail, setFollowingEmail] = useState("");
@@ -65,21 +67,40 @@ const SearchFriend = ({
           onSubmit={async (e) => {
             e.preventDefault();
             let isExistUser = false;
-            for (let i = 0; i < userList.length; i++) {
-              if (userList[i].email === followingEmail) {
-                isExistUser = true;
-                await addDoc(
-                  collection(dbService, `users/${userObj.email}/following`),
-                  {
-                    name: "",
-                    email: followingEmail,
-                  }
-                );
+            let isMyself = false;
+            let isAlreadyFollowing = false;
+            for (let i = 0; i < followingList.length; i++) {
+              if (followingList[i].email === followingEmail) {
+                isAlreadyFollowing = true;
                 break;
               }
             }
-            if (isExistUser === false) {
+            if (isAlreadyFollowing === false) {
+              for (let i = 0; i < userList.length; i++) {
+                if (userList[i].email === followingEmail) {
+                  isExistUser = true;
+                  if (userObj.email === followingEmail) {
+                    isMyself = true; // 나 자신임
+                  } else {
+                    await addDoc(
+                      collection(dbService, `users/${userObj.email}/following`),
+                      {
+                        name: "",
+                        email: followingEmail,
+                      }
+                    );
+                    setFollowingList([...followingList, followingEmail]);
+                  }
+                  break;
+                }
+              }
+            }
+            if (isAlreadyFollowing === true) {
+              alert("이미 팔로잉 되어 있음");
+            } else if (isExistUser === false) {
               alert("그런 사람 없음");
+            } else if (isMyself === true) {
+              alert("나 자신임");
             }
             setFollowingEmail("");
           }}

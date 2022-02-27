@@ -80,6 +80,8 @@ const Home = ({ userObj }) => {
         modalIsOpened={modalIsOpened}
         setModalIsOpened={setModalIsOpened}
         userList={userList}
+        followingList={followingList}
+        setFollowingList={setFollowingList}
       />
       {followingBtnList.length !== 0 ? (
         <BigCalendar key={clickedPerson.email} userObj={clickedPerson} />
