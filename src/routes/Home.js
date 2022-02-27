@@ -1,13 +1,13 @@
 import { click, dblClick } from "@testing-library/user-event/dist/click";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 
 import { dbService } from "../fbase";
 import { addDoc, collection } from "firebase/firestore";
 import { MdPersonSearch } from "react-icons/md";
 import BigCalendar from "./Calendar/BigCalendar";
+import SearchFriend from "./Friend/SearchFriend";
 
 const Home = ({ userObj }) => {
-  const [followingEmail, setFollowingEmail] = useState("");
   const [followingList, setFollowingList] = useState([]);
   const [userList, setUserList] = useState([]);
   const [followingBtnList, setFollowingBtnList] = useState([]);
@@ -16,6 +16,7 @@ const Home = ({ userObj }) => {
     name: "",
     email: "",
   });
+  const [modalIsOpened, setModalIsOpened] = useState(false);
 
   useEffect(() => {
     dbService
@@ -66,39 +67,20 @@ const Home = ({ userObj }) => {
     <>
       <div>{clickedPerson.email}</div>
       {followingBtnList}
-      <form
-        onSubmit={async (e) => {
-          e.preventDefault();
-          let isExistUser = false;
-          for (let i = 0; i < userList.length; i++) {
-            if (userList[i].email === followingEmail) {
-              isExistUser = true;
-              await addDoc(
-                collection(dbService, `users/${userObj.email}/following`),
-                {
-                  name: "",
-                  email: followingEmail,
-                }
-              );
-              break;
-            }
-          }
-          if (isExistUser === false) {
-            alert("그런 사람 없음");
-          }
-          setFollowingEmail("");
-        }}
-      >
+      <div>
         <MdPersonSearch />
         <input
-          type="email"
           placeholder="친구 검색"
-          value={followingEmail}
-          required
-          onChange={(e) => setFollowingEmail(e.target.value)}
+          onClick={(e) => setModalIsOpened(true)}
         />
-        <input type="submit" value="팔로잉하기" />
-      </form>
+      </div>
+
+      <SearchFriend
+        userObj={userObj}
+        modalIsOpened={modalIsOpened}
+        setModalIsOpened={setModalIsOpened}
+        userList={userList}
+      />
       {followingBtnList.length !== 0 ? (
         <BigCalendar key={clickedPerson.email} userObj={clickedPerson} />
       ) : (

@@ -17,7 +17,7 @@ const FriendsList = ({
   return (
     <Modal
       isOpen={modalIsOpened}
-      onRequestClose={() => setModalIsOpened(true)}
+      onRequestClose={() => setModalIsOpened(false)}
       style={{
         overlay: {
           position: "fixed",
