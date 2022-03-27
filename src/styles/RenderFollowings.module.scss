@@ -1,5 +1,7 @@
 $gray: #dee2e6;
 $blue: #1864ab;
+$gray2: #EFEFEF;
+$gray3: #8E8E8E;
 
 @import "./BigCalendar.module.scss";
 
@@ -26,4 +28,17 @@ $blue: #1864ab;
             background-image: url("../images/white_person.png");
         }
     }
+    .PersonSearch{
+        width: 200px;
+        display: flex;
+        padding: 4px;
+        background-color: $gray2;
+        border-radius: 10px;
+        .SearchBox{
+            margin: 3px;
+            border:none;
+            background-color: $gray2;
+        }
+    }
+    
 }

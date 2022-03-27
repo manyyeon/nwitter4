@@ -7,7 +7,7 @@ import { addDoc, collection } from "firebase/firestore";
 import { MdPersonSearch } from "react-icons/md";
 import BigCalendar from "../Calendar/BigCalendar";
 import SearchFriend from "./SearchFriend";
-import IoPersonCircleOutline from "react-icons/io5";
+import { BiSearch } from "react-icons/bi";
 import styles from "../../styles/RenderFollowings.module.scss";
 
 const cx = classNames.bind(styles);
@@ -69,14 +69,18 @@ const RenderFollowings = ({ userObj }) => {
   return (
     <div className={cx("RenderFollowings")}>
       <div>{clickedPerson.email}</div>
-      <div className={cx("FollowingBtnList")}>{followingBtnList}</div>
-      <div>
-        <MdPersonSearch />
+      <div className={cx("PersonSearch")}>
+        <BiSearch 
+        size="24" color="#8E8E8E" style={{display: "flex", justifyContent: "end"}}
+        />
         <input
+          className={cx("SearchBox")}
           placeholder="친구 검색"
           onClick={(e) => setModalIsOpened(true)}
         />
       </div>
+      <div className={cx("FollowingBtnList")}>{followingBtnList}</div>
+      
 
       <SearchFriend
         userObj={userObj}
