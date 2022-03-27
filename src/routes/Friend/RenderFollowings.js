@@ -2,11 +2,15 @@ import { click, dblClick } from "@testing-library/user-event/dist/click";
 import React, { useEffect, useState, useRef } from "react";
 
 import { dbService } from "../../fbase";
+import classNames from "classnames/bind";
 import { addDoc, collection } from "firebase/firestore";
 import { MdPersonSearch } from "react-icons/md";
 import BigCalendar from "../Calendar/BigCalendar";
 import SearchFriend from "./SearchFriend";
 import IoPersonCircleOutline from "react-icons/io5";
+import styles from "../../styles/RenderFollowings.module.scss";
+
+const cx = classNames.bind(styles);
 
 const RenderFollowings = ({ userObj }) => {
   const [followingList, setFollowingList] = useState([]);
@@ -38,7 +42,7 @@ const RenderFollowings = ({ userObj }) => {
             email: followingList[0].email,
           });
           const followingBtnList = snapshot.docs.map((doc) => (
-            <button
+            <button className={cx("Button")}
               id={doc.data().email}
               key={doc.id}
               onClick={(e) => {
@@ -47,7 +51,6 @@ const RenderFollowings = ({ userObj }) => {
                   email: e.target.id,
                 });
               }}
-              style={{background: "url(../../images/person_icon.png)", width:"100px", height:"50px", backgroundSize:"50px"}}
             >사람</button>
           ));
           setFollowingBtnList(followingBtnList);
