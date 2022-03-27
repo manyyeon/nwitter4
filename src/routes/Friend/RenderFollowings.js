@@ -42,7 +42,7 @@ const RenderFollowings = ({ userObj }) => {
             email: followingList[0].email,
           });
           const followingBtnList = snapshot.docs.map((doc) => (
-            <button className={cx("Button")}
+            <button className={cx("Following")}
               id={doc.data().email}
               key={doc.id}
               onClick={(e) => {
@@ -51,7 +51,7 @@ const RenderFollowings = ({ userObj }) => {
                   email: e.target.id,
                 });
               }}
-            >사람</button>
+            ></button>
           ));
           setFollowingBtnList(followingBtnList);
         }
@@ -67,9 +67,9 @@ const RenderFollowings = ({ userObj }) => {
   }, []);
 
   return (
-    <>
+    <div className={cx("RenderFollowings")}>
       <div>{clickedPerson.email}</div>
-      {followingBtnList}
+      <div className={cx("FollowingBtnList")}>{followingBtnList}</div>
       <div>
         <MdPersonSearch />
         <input
@@ -91,7 +91,7 @@ const RenderFollowings = ({ userObj }) => {
       ) : (
         "팔로잉할 사람을 추가해보세요"
       )}
-    </>
+    </div>
   );
 };
 export default RenderFollowings;
