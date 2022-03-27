@@ -6,6 +6,7 @@ import { addDoc, collection } from "firebase/firestore";
 import { MdPersonSearch } from "react-icons/md";
 import BigCalendar from "../Calendar/BigCalendar";
 import SearchFriend from "./SearchFriend";
+import IoPersonCircleOutline from "react-icons/io5";
 
 const RenderFollowings = ({ userObj }) => {
   const [followingList, setFollowingList] = useState([]);
@@ -46,9 +47,8 @@ const RenderFollowings = ({ userObj }) => {
                   email: e.target.id,
                 });
               }}
-            >
-              사람
-            </button>
+              style={{background: "url(../../images/person_icon.png)", width:"100px", height:"50px", backgroundSize:"50px"}}
+            >사람</button>
           ));
           setFollowingBtnList(followingBtnList);
         }
